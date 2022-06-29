@@ -8,6 +8,9 @@ export const GlobalStyles: FC = () => (
       html: {
         fontFamily: 'Roboto',
       },
+      '*': {
+        boxSizing: 'border-box',
+      },
     })}
   />
 );

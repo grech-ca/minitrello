@@ -1,15 +1,21 @@
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 
-import { GlobalStyles } from 'styles/GlobalStyles';
+import { ChakraProvider } from '@chakra-ui/react';
+
+import { GlobalStyles, theme } from 'styles';
+
+import { Router } from 'Router';
 
 import 'normalize.css/normalize.css';
 import '@fontsource/roboto';
 
 export const App: FC = () => {
   return (
-    <div>
+    <Fragment>
       <GlobalStyles />
-      Minitrello
-    </div>
+      <ChakraProvider theme={theme}>
+        <Router />
+      </ChakraProvider>
+    </Fragment>
   );
 };
