@@ -1,8 +1,7 @@
-export interface Column {
+export interface List {
+  id: string;
   title: string;
 }
-
-export type CreateColumn = Column;
 
 export interface Card {
   title: string;

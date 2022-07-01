@@ -2,10 +2,15 @@ import { FC, useRef, useState, FormEventHandler, ChangeEventHandler } from 'reac
 
 import { useKey, useClickAway } from 'react-use';
 import { AnimatePresence } from 'framer-motion';
+import { useDispatch } from 'react-redux';
 
-import { Wrapper, Form, Actions, CloseButton, Input, Placeholder, CloseIcon, AddButton } from './styles';
+import { createListAction } from 'store/slices';
+
+import { Wrapper, AddIcon, Form, Actions, CloseButton, Input, Placeholder, CloseIcon, AddButton } from './styles';
 
 export const CreateList: FC = () => {
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
 
@@ -22,16 +27,19 @@ export const CreateList: FC = () => {
   useClickAway(formRef, close);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
-    if (!title) return;
     e.preventDefault();
-    close();
+    if (!title) return;
+    dispatch(createListAction(title));
+    setTitle('');
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => setTitle(value);
 
   return (
     <Wrapper role="button">
-      <Placeholder onClick={open}>+ Add a list</Placeholder>
+      <Placeholder onClick={open}>
+        <AddIcon /> Add a list
+      </Placeholder>
       <AnimatePresence>
         {isOpen && (
           <Form

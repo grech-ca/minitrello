@@ -1,19 +1,19 @@
 import styled from '@emotion/styled';
-import { MdClose } from 'react-icons/md';
+import { MdAdd, MdClose } from 'react-icons/md';
 import { motion } from 'framer-motion';
 
-export const Wrapper = styled.div({
+export const Wrapper = styled.div(({ theme }) => ({
   height: 40,
   width: 272,
   background: '#ffffff3D',
-  borderRadius: 3,
+  borderRadius: theme.rounding.sm,
   transition: '.2s ease',
   position: 'relative',
 
   ':hover': {
     background: '#ffffff52',
   },
-});
+}));
 
 export const Input = styled.input(({ theme }) => ({
   height: 36,
@@ -21,21 +21,21 @@ export const Input = styled.input(({ theme }) => ({
   outline: 'none',
   border: '2px solid',
   borderColor: theme.colors.primary,
-  borderRadius: 3,
+  borderRadius: theme.rounding.sm,
 }));
 
-export const Form = styled(motion.form)({
+export const Form = styled(motion.form)(({ theme }) => ({
   width: '100%',
   position: 'absolute',
   top: 0,
   left: 0,
-  borderRadius: 3,
+  borderRadius: theme.rounding.sm,
   padding: 4,
   background: '#ebecf0',
   display: 'flex',
   flexDirection: 'column',
   gap: 4,
-});
+}));
 
 export const Actions = styled.div({
   display: 'flex',
@@ -79,9 +79,15 @@ export const Placeholder = styled.span({
 });
 
 export const AddButton = styled.button(({ theme }) => ({
-  borderRadius: 3,
+  borderRadius: theme.rounding.sm,
   border: 'none',
   color: theme.colors.white,
   background: theme.colors.primary,
   padding: '4px 12px',
+  cursor: 'pointer',
 }));
+
+export const AddIcon = styled(MdAdd)({
+  fontSize: 20,
+  marginRight: 2,
+});
