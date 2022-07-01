@@ -11,6 +11,10 @@ export const GlobalStyles: FC = () => (
       '*': {
         boxSizing: 'border-box',
       },
+      'html, body, #root': {
+        height: '100%',
+        background: '#ccc',
+      },
     })}
   />
 );

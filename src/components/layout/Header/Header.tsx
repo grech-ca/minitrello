@@ -1,13 +1,11 @@
 import { FC } from 'react';
 
-import { Logo } from 'components/common';
-
-import { StyledHeader } from './styles';
+import { StyledHeader, Logo } from './styles';
 
 export const Header: FC = () => {
   return (
     <StyledHeader>
-      <Logo />
+      <Logo>Minitrello</Logo>
     </StyledHeader>
   );
 };

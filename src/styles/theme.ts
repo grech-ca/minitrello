@@ -1,11 +1,8 @@
-import { extendTheme } from '@chakra-ui/react';
-
-export const theme = extendTheme({
-  components: {
-    Button: {
-      baseStyle: {
-        borderRadius: 3,
-      },
-    },
+export const theme = {
+  colors: {
+    primary: '#A169E9',
+    white: '#fff',
   },
-});
+} as const;
+
+export type Theme = typeof theme;

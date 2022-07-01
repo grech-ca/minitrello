@@ -1,9 +1,17 @@
 import styled from '@emotion/styled';
-import { theme } from '@chakra-ui/react';
 
-export const StyledHeader = styled.header({
+export const StyledHeader = styled.header(({ theme }) => ({
   height: 44,
   padding: '6px 4px',
   display: 'flex',
-  background: theme.colors.purple['500'],
-});
+  background: theme.colors.primary,
+}));
+
+export const Logo = styled.div(({ theme }) => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  padding: 5,
+  fontWeight: 900,
+  color: theme.colors.white,
+  fontSize: 20,
+}));

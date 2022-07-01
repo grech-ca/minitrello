@@ -1,10 +1,15 @@
 import { FC, Fragment } from 'react';
 
-import { ChakraProvider } from '@chakra-ui/react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from '@emotion/react';
+
+import { Board } from 'components/board';
+import { Layout } from 'components/layout';
+
+import { store, persistor } from 'store';
 
 import { GlobalStyles, theme } from 'styles';
-
-import { Router } from 'Router';
 
 import 'normalize.css/normalize.css';
 import '@fontsource/roboto';
@@ -13,9 +18,15 @@ export const App: FC = () => {
   return (
     <Fragment>
       <GlobalStyles />
-      <ChakraProvider theme={theme}>
-        <Router />
-      </ChakraProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider theme={theme}>
+            <Layout>
+              <Board />
+            </Layout>
+          </ThemeProvider>
+        </PersistGate>
+      </Provider>
     </Fragment>
   );
 };
