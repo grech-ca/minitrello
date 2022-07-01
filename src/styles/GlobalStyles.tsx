@@ -8,6 +8,13 @@ export const GlobalStyles: FC = () => (
       html: {
         fontFamily: 'Roboto',
       },
+      '*': {
+        boxSizing: 'border-box',
+      },
+      'html, body, #root': {
+        height: '100%',
+        background: '#ccc',
+      },
     })}
   />
 );
