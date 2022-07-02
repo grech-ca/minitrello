@@ -28,7 +28,7 @@ export interface ListProps {
 const ListComponent: FC<ListProps> = ({ list }) => {
   const dispatch = useDispatch();
 
-  const cards = useSelector((state: RootState) => state.board.cards.filter(({ listId }) => listId === list.id));
+  const cards = useSelector((state: RootState) => state.board.cards.filter(({ id }) => list.cardIds.includes(id)));
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

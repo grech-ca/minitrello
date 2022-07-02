@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import shortid from 'shortid';
+import { find, reject, set, without } from 'lodash';
 
 import { List, Card, CreateCard } from './types';
 
@@ -21,14 +22,18 @@ export const boardSlice = createSlice({
       const newList: List = {
         id: shortid.generate(),
         title: action.payload,
+        cardIds: [],
       };
       state.lists = [...state.lists, newList];
     },
     deleteList: (state, action: PayloadAction<string>) => {
-      state.lists = state.lists.filter(({ id }) => id !== action.payload);
-      state.cards = state.cards.filter(({ listId }) => listId !== action.payload);
+      const listToDelete = find(state.lists, { id: action.payload });
+      if (!listToDelete) return;
+
+      state.lists = reject(state.lists, { id: action.payload });
+      state.cards = reject(state.cards, ({ id }) => listToDelete.cardIds.includes(id));
     },
-    updateList: (state, action: PayloadAction<List>) => {
+    updateList: (state, action: PayloadAction<Omit<List, 'cardIds'>>) => {
       const { id, ...data } = action.payload;
       state.lists = state.lists.map(list => {
         if (list.id !== id) return list;
@@ -41,9 +46,17 @@ export const boardSlice = createSlice({
         ...action.payload,
       };
       state.cards = [...state.cards, newCard];
+      state.lists = state.lists.map(list => {
+        if (list.id !== action.payload.listId) return list;
+        return set(list, 'cardIds', [...list.cardIds, newCard.id]);
+      });
     },
     deleteCard: (state, action: PayloadAction<string>) => {
-      state.cards = state.cards.filter(({ id }) => id !== action.payload);
+      state.cards = reject(state.cards, { id: action.payload });
+      state.lists = state.lists.map(list => {
+        if (!list.cardIds.includes(action.payload)) return list;
+        return set(list, 'cardIds', without(list.cardIds, action.payload));
+      });
     },
   },
 });
