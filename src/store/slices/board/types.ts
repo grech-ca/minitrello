@@ -4,7 +4,9 @@ export interface List {
 }
 
 export interface Card {
+  id: string;
+  listId: string;
   title: string;
 }
 
-export type CreateCard = Card;
+export type CreateCard = Omit<Card, 'id'>;

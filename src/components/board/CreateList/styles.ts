@@ -42,30 +42,6 @@ export const Actions = styled.div({
   gap: 4,
 });
 
-export const CloseIcon = styled(MdClose)({
-  height: '80%',
-  width: '80%',
-});
-
-export const CloseButton = styled.button({
-  border: 'none',
-  background: 'none',
-  cursor: 'pointer',
-  height: 32,
-  width: 32,
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontSize: 20,
-  opacity: 0.6,
-  transition: '.2s ease',
-  padding: 0,
-
-  ':hover': {
-    opacity: 0.9,
-  },
-});
-
 export const Placeholder = styled.span({
   display: 'inline-flex',
   alignItems: 'center',
@@ -77,15 +53,6 @@ export const Placeholder = styled.span({
   width: '100%',
   cursor: 'pointer',
 });
-
-export const AddButton = styled.button(({ theme }) => ({
-  borderRadius: theme.rounding.sm,
-  border: 'none',
-  color: theme.colors.white,
-  background: theme.colors.primary,
-  padding: '4px 12px',
-  cursor: 'pointer',
-}));
 
 export const AddIcon = styled(MdAdd)({
   fontSize: 20,

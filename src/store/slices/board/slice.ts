@@ -35,7 +35,14 @@ export const boardSlice = createSlice({
       });
     },
     createCard: (state, action: PayloadAction<CreateCard>) => {
-      state.cards = [...state.cards, action.payload];
+      const newCard: Card = {
+        id: shortid.generate(),
+        ...action.payload,
+      };
+      state.cards = [...state.cards, newCard];
+    },
+    deleteCard: (state, action: PayloadAction<string>) => {
+      state.cards = state.cards.filter(({ id }) => id !== action.payload);
     },
   },
 });
@@ -44,6 +51,7 @@ export const boardReducer = boardSlice.reducer;
 
 export const {
   createCard: createCardAction,
+  deleteCard: deleteCardAction,
   createList: createListAction,
   deleteList: deleteListAction,
   updateList: updateListAction,

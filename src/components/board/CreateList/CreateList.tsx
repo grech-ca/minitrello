@@ -4,9 +4,11 @@ import { useKey, useClickAway } from 'react-use';
 import { AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 
+import { Button, CloseButton } from 'components/common';
+
 import { createListAction } from 'store/slices';
 
-import { Wrapper, AddIcon, Form, Actions, CloseButton, Input, Placeholder, CloseIcon, AddButton } from './styles';
+import { Wrapper, AddIcon, Form, Actions, Input, Placeholder } from './styles';
 
 export const CreateList: FC = () => {
   const dispatch = useDispatch();
@@ -59,10 +61,8 @@ export const CreateList: FC = () => {
               onChange={handleChange}
             />
             <Actions>
-              <AddButton type="submit">Add list</AddButton>
-              <CloseButton type="button" onClick={close}>
-                <CloseIcon />
-              </CloseButton>
+              <Button type="submit">Add list</Button>
+              <CloseButton onClick={close} />
             </Actions>
           </Form>
         )}

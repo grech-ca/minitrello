@@ -1,8 +1,11 @@
 import { ChangeEventHandler, FC, FormEventHandler, useState, useRef } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useKey, useClickAway } from 'react-use';
 
+import { Card, CreateCard } from 'components/board';
+
+import { RootState } from 'store';
 import { deleteListAction, updateListAction } from 'store/slices';
 import { List } from 'store/slices/board/types';
 
@@ -11,10 +14,7 @@ import {
   ListHeader,
   ListTitle,
   ListTitleForm,
-  ListFooter,
-  AddCardButton,
-  AddCardButtonText,
-  AddCardButtonIcon,
+  ListBody,
   DeleteButton,
   DeleteIcon,
   ListTitleInput,
@@ -26,6 +26,8 @@ export interface ListProps {
 
 const ListComponent: FC<ListProps> = ({ list }) => {
   const dispatch = useDispatch();
+
+  const cards = useSelector((state: RootState) => state.board.cards.filter(({ listId }) => listId === list.id));
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -53,8 +55,9 @@ const ListComponent: FC<ListProps> = ({ list }) => {
   return (
     <ListWrapper>
       <ListHeader>
-        {!isEdit && <ListTitle onClick={handleClick}>{title}</ListTitle>}
-        {isEdit && (
+        {!isEdit ? (
+          <ListTitle onClick={handleClick}>{title}</ListTitle>
+        ) : (
           <ListTitleForm onSubmit={handleSubmit}>
             <ListTitleInput ref={inputRef} autoFocus value={title} onChange={handleChange} onBlur={stopEditing} />
           </ListTitleForm>
@@ -63,12 +66,12 @@ const ListComponent: FC<ListProps> = ({ list }) => {
           <DeleteIcon />
         </DeleteButton>
       </ListHeader>
-      <ListFooter>
-        <AddCardButton>
-          <AddCardButtonIcon />
-          <AddCardButtonText>Add a card</AddCardButtonText>
-        </AddCardButton>
-      </ListFooter>
+      <ListBody>
+        {cards.map(card => (
+          <Card key={card.id} card={card} />
+        ))}
+        <CreateCard listId={list.id} />
+      </ListBody>
     </ListWrapper>
   );
 };
