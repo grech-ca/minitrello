@@ -5,6 +5,7 @@ export const theme = {
   },
   rounding: {
     sm: 3,
+    lg: 12,
   },
 } as const;
 

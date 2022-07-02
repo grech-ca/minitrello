@@ -11,14 +11,14 @@ export const ListWrapper = styled.div(({ theme }) => ({
   minWidth: 272,
   maxHeight: '100%',
   overflow: 'hidden',
-  gap: 10,
 }));
 
 export const ListHeader = styled.div({
   display: 'flex',
   alignItems: 'flex-start',
-  padding: '10px 8px',
+  padding: 8,
   paddingRight: 4,
+  paddingBottom: 0,
   minHeight: 40,
   cursor: 'pointer',
 });
@@ -75,6 +75,7 @@ export const ListBody = styled.div({
   gap: 10,
   flex: 1,
   padding: '0 10px',
+  paddingTop: 8,
   overflowY: 'auto',
 });
 
@@ -83,6 +84,5 @@ export const ListFooter = styled.div({
   justifyContent: 'stretch',
   alignItems: 'center',
   gap: 4,
-  padding: 10,
-  paddingTop: 0,
+  padding: '8px 10px',
 });
