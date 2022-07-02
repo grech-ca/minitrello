@@ -40,7 +40,7 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
   };
 
   useKey('Escape', close);
-  useClickAway(formRef, createCard);
+  useClickAway(formRef, title ? createCard : close);
 
   if (isOpen) {
     return (

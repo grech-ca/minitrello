@@ -26,6 +26,7 @@ export const boardSlice = createSlice({
     },
     deleteList: (state, action: PayloadAction<string>) => {
       state.lists = state.lists.filter(({ id }) => id !== action.payload);
+      state.cards = state.cards.filter(({ listId }) => listId !== action.payload);
     },
     updateList: (state, action: PayloadAction<List>) => {
       const { id, ...data } = action.payload;

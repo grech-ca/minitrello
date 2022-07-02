@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { MdAdd, MdClose } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 import { motion } from 'framer-motion';
 
 export const Wrapper = styled.div(({ theme }) => ({
-  height: 40,
+  height: 'fit-content',
   width: 272,
+  minWidth: 272,
   background: '#ffffff3D',
   borderRadius: theme.rounding.sm,
   transition: '.2s ease',

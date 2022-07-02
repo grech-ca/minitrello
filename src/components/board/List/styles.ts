@@ -1,40 +1,50 @@
 import styled from '@emotion/styled';
 import { MdDelete } from 'react-icons/md';
+import ReactTextarea from 'react-textarea-autosize';
 
 export const ListWrapper = styled.div(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
   borderRadius: theme.rounding.sm,
   background: '#ebecf0',
   width: 272,
+  minWidth: 272,
+  maxHeight: '100%',
+  overflow: 'hidden',
+  gap: 10,
 }));
 
 export const ListHeader = styled.div({
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   padding: '10px 8px',
   paddingRight: 4,
-  height: 40,
+  minHeight: 40,
   cursor: 'pointer',
 });
 
 export const ListTitle = styled.h2({
-  padding: '4px 8px',
+  display: 'block',
+  padding: 8,
   flex: 1,
   fontSize: 14,
   fontWeight: 700,
   margin: 0,
+  wordWrap: 'break-word',
+  wordBreak: 'break-all',
+  minHeight: 32,
 });
 
 export const ListTitleForm = styled.form({
   flex: 1,
-  position: 'relative',
-  left: -2,
 });
 
-export const ListTitleInput = styled.input({
+export const ListTitleTextarea = styled(ReactTextarea)({
   padding: '4px 8px',
   fontSize: 14,
   fontWeight: 700,
   width: '100%',
+  resize: 'none',
 });
 
 export const DeleteButton = styled.button(({ theme }) => ({
@@ -44,7 +54,7 @@ export const DeleteButton = styled.button(({ theme }) => ({
   cursor: 'pointer',
   height: 32,
   width: 32,
-  padding: 6,
+  padding: '0 6px',
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -63,5 +73,16 @@ export const ListBody = styled.div({
   display: 'flex',
   flexDirection: 'column',
   gap: 10,
+  flex: 1,
+  padding: '0 10px',
+  overflowY: 'auto',
+});
+
+export const ListFooter = styled.div({
+  display: 'flex',
+  justifyContent: 'stretch',
+  alignItems: 'center',
+  gap: 4,
   padding: 10,
+  paddingTop: 0,
 });

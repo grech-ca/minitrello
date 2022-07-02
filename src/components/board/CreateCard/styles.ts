@@ -3,6 +3,7 @@ import ReactTextarea from 'react-textarea-autosize';
 import { MdAdd } from 'react-icons/md';
 
 export const CreateCardWrapper = styled.form({
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   gap: 8,

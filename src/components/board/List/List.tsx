@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, FormEventHandler, useState, useRef } from 'react';
+import { ChangeEventHandler, FC, FormEventHandler, useState, useRef, KeyboardEventHandler } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useKey, useClickAway } from 'react-use';
@@ -17,7 +17,8 @@ import {
   ListBody,
   DeleteButton,
   DeleteIcon,
-  ListTitleInput,
+  ListTitleTextarea,
+  ListFooter,
 } from './styles';
 
 export interface ListProps {
@@ -29,7 +30,7 @@ const ListComponent: FC<ListProps> = ({ list }) => {
 
   const cards = useSelector((state: RootState) => state.board.cards.filter(({ listId }) => listId === list.id));
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [title, setTitle] = useState(list.title);
   const [isEdit, setIsEdit] = useState(false);
@@ -37,14 +38,22 @@ const ListComponent: FC<ListProps> = ({ list }) => {
   const startEditing = () => setIsEdit(true);
   const stopEditing = () => setIsEdit(false);
 
-  const handleDelete = () => dispatch(deleteListAction(list.id));
-  const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => setTitle(value);
-  const handleClick = () => !isEdit && startEditing();
+  const renameList = () => {
+    dispatch(updateListAction({ id: list.id, title }));
+    stopEditing();
+  };
 
-  const renameList = () => dispatch(updateListAction({ id: list.id, title }));
+  const handleDelete = () => dispatch(deleteListAction(list.id));
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = ({ target: { value } }) => setTitle(value);
+  const handleClick = () => !isEdit && startEditing();
+  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    renameList();
+  };
 
   useKey('Escape', renameList);
-  useClickAway(inputRef, renameList);
+  useClickAway(textareaRef, renameList);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
@@ -59,19 +68,30 @@ const ListComponent: FC<ListProps> = ({ list }) => {
           <ListTitle onClick={handleClick}>{title}</ListTitle>
         ) : (
           <ListTitleForm onSubmit={handleSubmit}>
-            <ListTitleInput ref={inputRef} autoFocus value={title} onChange={handleChange} onBlur={stopEditing} />
+            <ListTitleTextarea
+              ref={textareaRef}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              value={title}
+              onChange={handleChange}
+              onBlur={stopEditing}
+            />
           </ListTitleForm>
         )}
         <DeleteButton onClick={handleDelete}>
           <DeleteIcon />
         </DeleteButton>
       </ListHeader>
-      <ListBody>
-        {cards.map(card => (
-          <Card key={card.id} card={card} />
-        ))}
+      {cards.length > 0 && (
+        <ListBody>
+          {cards.map(card => (
+            <Card key={card.id} card={card} />
+          ))}
+        </ListBody>
+      )}
+      <ListFooter>
         <CreateCard listId={list.id} />
-      </ListBody>
+      </ListFooter>
     </ListWrapper>
   );
 };
