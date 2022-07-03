@@ -1,10 +1,12 @@
 import { FC, useRef, useState, FormEventHandler, ChangeEventHandler } from 'react';
 
-import { useKey, useClickAway } from 'react-use';
+import { useClickAway } from 'react-use';
 import { AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 
 import { Button, CloseButton } from 'components/common';
+
+import { useEscape } from 'hooks';
 
 import { createListAction } from 'store/slices';
 
@@ -25,7 +27,7 @@ export const CreateList: FC = () => {
   };
   const close = () => setIsOpen(false);
 
-  useKey('Escape', close);
+  useEscape(close);
   useClickAway(formRef, close);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {

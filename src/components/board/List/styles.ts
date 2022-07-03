@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import { MdDelete } from 'react-icons/md';
-import ReactTextarea from 'react-textarea-autosize';
+
+import { Editable } from 'components/common';
 
 export const ListWrapper = styled.div(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   borderRadius: theme.rounding.sm,
-  background: '#ebecf0',
+  background: theme.colors.lightGray,
   width: 272,
   minWidth: 272,
   maxHeight: '100%',
@@ -23,28 +24,14 @@ export const ListHeader = styled.div({
   cursor: 'pointer',
 });
 
-export const ListTitle = styled.h2({
+export const ListTitle = styled(Editable)({
   display: 'block',
-  padding: 8,
   flex: 1,
   fontSize: 14,
   fontWeight: 700,
   margin: 0,
   wordWrap: 'break-word',
   wordBreak: 'break-all',
-  minHeight: 32,
-});
-
-export const ListTitleForm = styled.form({
-  flex: 1,
-});
-
-export const ListTitleTextarea = styled(ReactTextarea)({
-  padding: '4px 8px',
-  fontSize: 14,
-  fontWeight: 700,
-  width: '100%',
-  resize: 'none',
 });
 
 export const DeleteButton = styled.button(({ theme }) => ({

@@ -32,7 +32,7 @@ export const Form = styled(motion.form)(({ theme }) => ({
   left: 0,
   borderRadius: theme.rounding.sm,
   padding: 4,
-  background: '#ebecf0',
+  background: theme.colors.lightGray,
   display: 'flex',
   flexDirection: 'column',
   gap: 4,

@@ -16,7 +16,9 @@ export const ModalOverlay = styled(motion.div)({
 
 export const ModalWrapper = styled(motion.div)(({ theme }) => ({
   borderRadius: theme.rounding.sm,
-  background: theme.colors.white,
+  background: theme.colors.lightGray,
   padding: 8,
-  minWidth: 500,
+  minWidth: 768,
+  position: 'relative',
+  minHeight: 300,
 }));

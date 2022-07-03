@@ -1,7 +1,6 @@
-import { ChangeEventHandler, FC, FormEventHandler, useState, useRef, KeyboardEventHandler } from 'react';
+import { FC, FocusEventHandler, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useKey, useClickAway } from 'react-use';
 import { Droppable } from 'react-beautiful-dnd';
 import { find, compact } from 'lodash';
 
@@ -11,17 +10,7 @@ import { RootState } from 'store';
 import { deleteListAction, updateListAction } from 'store/slices';
 import { List } from 'store/slices/board/types';
 
-import {
-  ListWrapper,
-  ListHeader,
-  ListTitle,
-  ListTitleForm,
-  ListBody,
-  DeleteButton,
-  DeleteIcon,
-  ListTitleTextarea,
-  ListFooter,
-} from './styles';
+import { ListWrapper, ListHeader, ListBody, DeleteButton, DeleteIcon, ListFooter, ListTitle } from './styles';
 
 export interface ListProps {
   list: List;
@@ -34,54 +23,17 @@ const ListComponent: FC<ListProps> = ({ list }) => {
     return compact(list.cardIds.map(cardId => find(state.board.cards, { id: cardId })));
   });
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const [title, setTitle] = useState(list.title);
-  const [isEdit, setIsEdit] = useState(false);
 
-  const startEditing = () => setIsEdit(true);
-  const stopEditing = () => setIsEdit(false);
-
-  const renameList = () => {
-    dispatch(updateListAction({ id: list.id, title }));
-    stopEditing();
-  };
+  const renameList = () => dispatch(updateListAction({ id: list.id, title }));
+  const resetTitle = () => setTitle(list.title);
 
   const handleDelete = () => dispatch(deleteListAction(list.id));
-  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = ({ target: { value } }) => setTitle(value);
-  const handleClick = () => !isEdit && startEditing();
-  const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = e => {
-    if (e.key !== 'Enter') return;
-    e.preventDefault();
-    renameList();
-  };
-
-  useKey('Escape', renameList);
-  useClickAway(textareaRef, renameList);
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
-    e.preventDefault();
-    renameList();
-    stopEditing();
-  };
 
   return (
     <ListWrapper>
       <ListHeader>
-        {!isEdit ? (
-          <ListTitle onClick={handleClick}>{title}</ListTitle>
-        ) : (
-          <ListTitleForm onSubmit={handleSubmit}>
-            <ListTitleTextarea
-              ref={textareaRef}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              value={title}
-              onChange={handleChange}
-              onBlur={stopEditing}
-            />
-          </ListTitleForm>
-        )}
+        <ListTitle value={title} onChange={setTitle} onCancel={resetTitle} onSubmit={renameList} selectOnFocus />
         <DeleteButton onClick={handleDelete}>
           <DeleteIcon />
         </DeleteButton>

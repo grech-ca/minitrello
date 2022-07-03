@@ -1,8 +1,10 @@
 import { FC, ReactNode, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useKey, useClickAway } from 'react-use';
+import { useClickAway } from 'react-use';
 import { useNavigate } from 'react-router-dom';
+
+import { useEscape } from 'hooks';
 
 import { ModalName } from 'store/slices';
 
@@ -21,7 +23,7 @@ export const Modal: FC<ModalProps> = ({ children }) => {
 
   const close = () => navigate('/');
 
-  useKey('Escape', close);
+  useEscape(close);
   useClickAway(wrapperRef, close);
 
   return createPortal(

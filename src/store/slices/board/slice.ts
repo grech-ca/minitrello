@@ -58,6 +58,13 @@ export const boardSlice = createSlice({
         return set(list, 'cardIds', without(list.cardIds, action.payload));
       });
     },
+    updateCard: (state, action: PayloadAction<Card>) => {
+      const { id, ...data } = action.payload;
+      state.cards = state.cards.map(card => {
+        if (card.id !== id) return card;
+        return { ...card, ...data };
+      });
+    },
     moveCard: (state, action: PayloadAction<{ cardId: string; listId: string; index: number }>) => {
       const { cardId, listId, index } = action.payload;
 
@@ -85,4 +92,5 @@ export const {
   deleteList: deleteListAction,
   updateList: updateListAction,
   moveCard: moveCardAction,
+  updateCard: updateCardAction,
 } = boardSlice.actions;
