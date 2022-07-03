@@ -58,6 +58,21 @@ export const boardSlice = createSlice({
         return set(list, 'cardIds', without(list.cardIds, action.payload));
       });
     },
+    moveCard: (state, action: PayloadAction<{ cardId: string; listId: string; index: number }>) => {
+      const { cardId, listId, index } = action.payload;
+
+      state.lists = state.lists.map(list => {
+        if (!list.cardIds.includes(cardId)) return list;
+        return { ...list, cardIds: without(list.cardIds, cardId) };
+      });
+
+      state.lists = state.lists.map(list => {
+        if (list.id !== listId) return list;
+        const newCardIds = list.cardIds;
+        newCardIds.splice(index, 0, cardId);
+        return { ...list, cardIds: newCardIds };
+      });
+    },
   },
 });
 
@@ -69,4 +84,5 @@ export const {
   createList: createListAction,
   deleteList: deleteListAction,
   updateList: updateListAction,
+  moveCard: moveCardAction,
 } = boardSlice.actions;

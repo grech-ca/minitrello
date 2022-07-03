@@ -2,6 +2,8 @@ import { ChangeEventHandler, FC, FormEventHandler, useState, useRef, KeyboardEve
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useKey, useClickAway } from 'react-use';
+import { Droppable } from 'react-beautiful-dnd';
+import { find, compact } from 'lodash';
 
 import { Card, CreateCard } from 'components/board';
 
@@ -28,7 +30,9 @@ export interface ListProps {
 const ListComponent: FC<ListProps> = ({ list }) => {
   const dispatch = useDispatch();
 
-  const cards = useSelector((state: RootState) => state.board.cards.filter(({ id }) => list.cardIds.includes(id)));
+  const cards = useSelector((state: RootState) => {
+    return compact(list.cardIds.map(cardId => find(state.board.cards, { id: cardId })));
+  });
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -82,13 +86,16 @@ const ListComponent: FC<ListProps> = ({ list }) => {
           <DeleteIcon />
         </DeleteButton>
       </ListHeader>
-      {cards.length > 0 && (
-        <ListBody>
-          {cards.map(card => (
-            <Card key={card.id} card={card} />
-          ))}
-        </ListBody>
-      )}
+      <Droppable droppableId={list.id}>
+        {({ droppableProps, placeholder, innerRef }) => (
+          <ListBody {...droppableProps} ref={innerRef}>
+            {cards.map((card, index) => (
+              <Card index={index} key={card.id} card={card} />
+            ))}
+            {placeholder}
+          </ListBody>
+        )}
+      </Droppable>
       <ListFooter>
         <CreateCard listId={list.id} />
       </ListFooter>
