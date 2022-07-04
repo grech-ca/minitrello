@@ -11,7 +11,6 @@ export const ListWrapper = styled.div(({ theme }) => ({
   width: 272,
   minWidth: 272,
   maxHeight: '100%',
-  overflow: 'hidden',
 }));
 
 export const ListHeader = styled.div({
@@ -56,6 +55,10 @@ export const DeleteButton = styled.button(({ theme }) => ({
 
 export const DeleteIcon = styled(MdDelete)({});
 
+export const ListScrollContainer = styled.div({
+  overflowY: 'auto',
+});
+
 export const ListBody = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -63,7 +66,6 @@ export const ListBody = styled.div({
   flex: 1,
   padding: '0 10px',
   paddingTop: 8,
-  overflowY: 'auto',
 });
 
 export const ListFooter = styled.div({

@@ -56,7 +56,6 @@ rules:
   react/forbid-component-props:
     - error
     - forbid:
-      - style
       - className
   react/forbid-dom-props:
     - error
