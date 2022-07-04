@@ -5,11 +5,13 @@ import { find, reject, set, without } from 'lodash';
 import { List, Card, CreateCard } from './types';
 
 export interface BoardState {
+  listsOrder: string[];
   lists: List[];
   cards: Card[];
 }
 
 const initialState: BoardState = {
+  listsOrder: [],
   lists: [],
   cards: [],
 };
@@ -25,6 +27,7 @@ export const boardSlice = createSlice({
         cardIds: [],
       };
       state.lists = [...state.lists, newList];
+      state.listsOrder = [...state.listsOrder, newList.id];
     },
     deleteList: (state, action: PayloadAction<string>) => {
       const listToDelete = find(state.lists, { id: action.payload });
@@ -32,6 +35,7 @@ export const boardSlice = createSlice({
 
       state.lists = reject(state.lists, { id: action.payload });
       state.cards = reject(state.cards, ({ id }) => listToDelete.cardIds.includes(id));
+      state.listsOrder = without(state.listsOrder, action.payload);
     },
     updateList: (state, action: PayloadAction<Omit<List, 'cardIds'>>) => {
       const { id, ...data } = action.payload;
@@ -80,6 +84,12 @@ export const boardSlice = createSlice({
         return { ...list, cardIds: newCardIds };
       });
     },
+    moveList: (state, action: PayloadAction<{ listId: string; index: number }>) => {
+      const { listId, index } = action.payload;
+      const newOrder = without(state.listsOrder, listId);
+      newOrder.splice(index, 0, listId);
+      state.listsOrder = newOrder;
+    },
   },
 });
 
@@ -93,4 +103,5 @@ export const {
   updateList: updateListAction,
   moveCard: moveCardAction,
   updateCard: updateCardAction,
+  moveList: moveListAction,
 } = boardSlice.actions;
