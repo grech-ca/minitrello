@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Droppable, Draggable, DraggingStyle, NotDraggingStyle, DraggableStateSnapshot } from 'react-beautiful-dnd';
@@ -19,6 +19,7 @@ import {
   ListFooter,
   ListTitle,
   ListScrollContainer,
+  ListHandler,
 } from './styles';
 
 export interface ListProps {
@@ -43,12 +44,22 @@ const getStyle = (style: DraggingStyle | NotDraggingStyle | undefined, snapshot:
 const ListComponent: FC<ListProps> = ({ list, index }) => {
   const dispatch = useDispatch();
 
+  const [handlerVisible, setHandlerVisible] = useState(false);
+
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+
   const cards = useSelector((state: RootState) => {
     return compact(list.cardIds.map(cardId => find(state.board.cards, { id: cardId })));
   });
 
   const [title, setTitle] = useState(list.title);
 
+  const hideHandler = () => setHandlerVisible(false);
+  const showHandler = () => setHandlerVisible(true);
+  const startEditing = () => {
+    titleRef.current?.focus();
+    hideHandler();
+  };
   const renameList = () => dispatch(updateListAction({ id: list.id, title }));
   const resetTitle = () => setTitle(list.title);
 
@@ -59,12 +70,21 @@ const ListComponent: FC<ListProps> = ({ list, index }) => {
       {(provided, snapshot) => (
         <ListWrapper
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
           ref={provided.innerRef}
           style={getStyle(provided.draggableProps.style, snapshot)}
         >
-          <ListHeader>
-            <ListTitle value={title} onChange={setTitle} onCancel={resetTitle} onSubmit={renameList} selectOnFocus />
+          <ListHeader {...provided.dragHandleProps}>
+            {handlerVisible && <ListHandler onClick={startEditing} />}
+            <ListTitle
+              onBlur={showHandler}
+              ref={titleRef}
+              value={title}
+              onChange={setTitle}
+              onCancel={resetTitle}
+              onSubmit={renameList}
+              selectOnFocus
+              draggable="true"
+            />
             <DeleteButton onClick={handleDelete}>
               <DeleteIcon />
             </DeleteButton>

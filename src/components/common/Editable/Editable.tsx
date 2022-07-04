@@ -1,5 +1,4 @@
 import {
-  FC,
   forwardRef,
   KeyboardEventHandler,
   useRef,
@@ -21,9 +20,9 @@ export interface EditableProps extends Omit<TextareaAutosizeProps, 'onChange'> {
   selectOnFocus?: boolean;
 }
 
-export const Editable: FC<EditableProps> = forwardRef(
+export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
   ({ onSubmit, onCancel, value, onChange, selectOnFocus, onFocus, ...props }, ref) => {
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(document.createElement('textarea'));
 
     useImperativeHandle(ref, () => textareaRef.current);
 

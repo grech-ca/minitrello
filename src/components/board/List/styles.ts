@@ -21,6 +21,17 @@ export const ListHeader = styled.div({
   paddingBottom: 0,
   minHeight: 40,
   cursor: 'pointer',
+  position: 'relative',
+});
+
+export const ListHandler = styled.div({
+  position: 'absolute',
+  display: 'inline-block',
+  top: 0,
+  left: 0,
+  height: '100%',
+  width: '100%',
+  cursor: 'pointer',
 });
 
 export const ListTitle = styled(Editable)({
@@ -51,6 +62,8 @@ export const DeleteButton = styled.button(({ theme }) => ({
   ':hover': {
     background: '#ddd',
   },
+
+  zIndex: 1,
 }));
 
 export const DeleteIcon = styled(MdDelete)({});
