@@ -4,3 +4,4 @@ export * from './List';
 export * from './Card';
 export * from './CreateCard';
 export * from './CardModal';
+export * from './EditableDescription';

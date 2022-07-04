@@ -19,6 +19,7 @@
     "framer-motion": "^6.3.16",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
+    "markdown-to-jsx": "^7.1.7",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.0",

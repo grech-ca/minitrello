@@ -18,10 +18,25 @@ export interface EditableProps extends Omit<TextareaAutosizeProps, 'onChange'> {
   onSubmit?: () => void;
   onCancel?: () => void;
   selectOnFocus?: boolean;
+  submitOnEnter?: boolean;
+  cancelOnClickAway?: boolean;
 }
 
 export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
-  ({ onSubmit, onCancel, value, onChange, selectOnFocus, onFocus, ...props }, ref) => {
+  (
+    {
+      onSubmit,
+      onCancel,
+      value,
+      onChange,
+      selectOnFocus = true,
+      submitOnEnter = true,
+      cancelOnClickAway = true,
+      onFocus,
+      ...props
+    },
+    ref,
+  ) => {
     const textareaRef = useRef<HTMLTextAreaElement>(document.createElement('textarea'));
 
     useImperativeHandle(ref, () => textareaRef.current);
@@ -43,9 +58,11 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
       if (!textareaRef.current) return;
       switch (e.key) {
         case 'Enter':
-          e.preventDefault();
-          stopEditing();
-          submit();
+          if (submitOnEnter) {
+            e.preventDefault();
+            stopEditing();
+            submit();
+          }
           break;
         case 'Escape': {
           cancel();
@@ -56,7 +73,9 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
       }
     };
 
-    useClickAway(textareaRef, submit);
+    useClickAway(textareaRef, () => {
+      if (cancelOnClickAway) cancel();
+    });
 
     return (
       <EditableWrapper

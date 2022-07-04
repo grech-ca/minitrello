@@ -82,8 +82,6 @@ const ListComponent: FC<ListProps> = ({ list, index }) => {
               onChange={setTitle}
               onCancel={resetTitle}
               onSubmit={renameList}
-              selectOnFocus
-              draggable="true"
             />
             <DeleteButton onClick={handleDelete}>
               <DeleteIcon />

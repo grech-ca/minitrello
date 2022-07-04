@@ -62,7 +62,7 @@ export const boardSlice = createSlice({
         return set(list, 'cardIds', without(list.cardIds, action.payload));
       });
     },
-    updateCard: (state, action: PayloadAction<Card>) => {
+    updateCard: (state, action: PayloadAction<Partial<Card> & Pick<Card, 'id'>>) => {
       const { id, ...data } = action.payload;
       state.cards = state.cards.map(card => {
         if (card.id !== id) return card;

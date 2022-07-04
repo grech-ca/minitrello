@@ -7,4 +7,5 @@ export const ButtonWrapper = styled.button(({ theme }) => ({
   background: theme.colors.primary,
   padding: '4px 12px',
   cursor: 'pointer',
+  height: 32,
 }));

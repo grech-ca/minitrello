@@ -7,6 +7,7 @@ export interface List {
 export interface Card {
   id: string;
   title: string;
+  description?: string;
 }
 
 export interface CreateCard extends Omit<Card, 'id'> {
