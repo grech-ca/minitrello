@@ -1,7 +1,11 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
-export const CardWrapper = styled(Link)(({ theme }) => ({
+interface CardWrapperProps {
+  isDivider: boolean;
+}
+
+export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, isDivider }) => ({
   boxShadow: '0 1px 0 #091e4240',
   borderRadius: theme.rounding.sm,
   resize: 'none',
@@ -22,4 +26,18 @@ export const CardWrapper = styled(Link)(({ theme }) => ({
   ':hover': {
     background: '#f5f5fa',
   },
+
+  ...(isDivider
+    ? {
+        paddingInline: 16,
+
+        ':after': {
+          content: "''",
+          display: 'inline-block',
+          height: 2,
+          width: '100%',
+          background: '#ccc',
+        },
+      }
+    : {}),
 }));

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import { Draggable, DraggableStateSnapshot, DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
@@ -29,19 +29,22 @@ const getStyle = (style: DraggingStyle | NotDraggingStyle | undefined, snapshot:
 export const CardComponent: FC<CardProps> = ({ card, index }) => {
   const location = useLocation();
 
+  const isDivider = useMemo(() => /^-{3,}$/.test(card.title), [card.title]);
+
   return (
     <Draggable draggableId={card.id} index={index}>
       {(provided, snapshot) => (
         <CardWrapper
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          isDivider={isDivider}
           ref={provided.innerRef}
           role="button"
           to={`/c/${card.id}`}
           state={{ backgroundLocation: location }}
           style={getStyle(provided.draggableProps.style, snapshot)}
         >
-          {card.title}
+          {!isDivider && card.title}
         </CardWrapper>
       )}
     </Draggable>
