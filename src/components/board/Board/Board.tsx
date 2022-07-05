@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { compact, find } from 'lodash';
+import { compact } from 'lodash';
 
 import { CreateList, List } from 'components/board';
 
@@ -15,10 +15,10 @@ export const Board: FC = () => {
   const dispatch = useDispatch();
 
   const lists = useSelector((state: RootState) =>
-    compact(state.board.listsOrder.map(listId => find(state.board.lists, { id: listId }))),
+    compact(state.board.listsOrder.map(listId => state.board.lists[listId])),
   );
 
-  const onDragEnd = ({ draggableId, destination, type }: DropResult) => {
+  const onDragEnd = ({ draggableId, destination, source, type }: DropResult) => {
     if (!destination) return;
 
     if (type === 'card') {
@@ -26,6 +26,7 @@ export const Board: FC = () => {
         moveCardAction({
           cardId: draggableId,
           listId: destination.droppableId,
+          sourceListId: source.droppableId,
           index: destination.index,
         }),
       );

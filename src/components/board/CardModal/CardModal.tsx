@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 
 import { useParams, Navigate, useNavigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +32,7 @@ export const CardModal: FC = () => {
 
   const dispatch = useDispatch();
 
-  const card = useSelector((state: RootState) => state.board.cards.find(({ id }) => id === cardId));
+  const card = useSelector((state: RootState) => (cardId ? state.board.cards[cardId] : null));
 
   const [title, setTitle] = useState(card?.title || '');
   const [description, setDescription] = useState(card?.description || '');

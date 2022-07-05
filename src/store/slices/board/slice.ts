@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import shortid from 'shortid';
-import { find, reject, set, without } from 'lodash';
+import { find, reject, set, unset, without, merge } from 'lodash';
 
 import { List, Card, CreateCard } from './types';
 
 export interface BoardState {
   listsOrder: string[];
-  lists: List[];
-  cards: Card[];
+  lists: Record<string, List>;
+  cards: Record<string, Card>;
 }
 
 const initialState: BoardState = {
   listsOrder: [],
-  lists: [],
-  cards: [],
+  lists: {},
+  cards: {},
 };
 
 export const boardSlice = createSlice({
@@ -26,63 +26,86 @@ export const boardSlice = createSlice({
         title: action.payload,
         cardIds: [],
       };
-      state.lists = [...state.lists, newList];
+
+      set(state.lists, newList.id, newList);
       state.listsOrder = [...state.listsOrder, newList.id];
     },
     deleteList: (state, action: PayloadAction<string>) => {
+      const deleteId = action.payload;
+
       const listToDelete = find(state.lists, { id: action.payload });
       if (!listToDelete) return;
 
-      state.lists = reject(state.lists, { id: action.payload });
-      state.cards = reject(state.cards, ({ id }) => listToDelete.cardIds.includes(id));
-      state.listsOrder = without(state.listsOrder, action.payload);
+      unset(state.lists, deleteId);
+
+      listToDelete.cardIds.forEach(cardId => unset(state.cards, cardId));
+      state.listsOrder = without(state.listsOrder, deleteId);
     },
     updateList: (state, action: PayloadAction<Omit<List, 'cardIds'>>) => {
       const { id, ...data } = action.payload;
-      state.lists = state.lists.map(list => {
-        if (list.id !== id) return list;
-        return { ...list, ...data };
-      });
+
+      const targetList = state.lists[id];
+      if (!targetList) return;
+
+      state.lists[id] = merge(targetList, data);
     },
     createCard: (state, action: PayloadAction<CreateCard>) => {
+      const data = action.payload;
+
       const newCard: Card = {
         id: shortid.generate(),
-        ...action.payload,
+        ...data,
       };
-      state.cards = [...state.cards, newCard];
-      state.lists = state.lists.map(list => {
-        if (list.id !== action.payload.listId) return list;
-        return set(list, 'cardIds', [...list.cardIds, newCard.id]);
-      });
+      state.cards[newCard.id] = newCard;
+
+      const targetList = state.lists[data.listId];
+      if (!targetList) return;
+
+      state.lists[data.listId] = set(targetList, 'cardIds', [...targetList.cardIds, newCard.id]);
     },
     deleteCard: (state, action: PayloadAction<string>) => {
-      state.cards = reject(state.cards, { id: action.payload });
-      state.lists = state.lists.map(list => {
-        if (!list.cardIds.includes(action.payload)) return list;
-        return set(list, 'cardIds', without(list.cardIds, action.payload));
-      });
+      const deleteId = action.payload;
+
+      const targetCard = state.cards[deleteId];
+      if (!targetCard) return;
+
+      unset(state.cards, deleteId);
+
+      const targetList = state.lists[targetCard.listId];
+      if (!targetList) return;
+
+      set(state.lists, `${targetList.id}.cardIds`, without(targetList.cardIds, deleteId));
     },
     updateCard: (state, action: PayloadAction<Partial<Card> & Pick<Card, 'id'>>) => {
       const { id, ...data } = action.payload;
-      state.cards = state.cards.map(card => {
-        if (card.id !== id) return card;
-        return { ...card, ...data };
-      });
+
+      const targetCard = state.cards[id];
+      if (!targetCard) return;
+
+      set(state.cards, id, data);
     },
-    moveCard: (state, action: PayloadAction<{ cardId: string; listId: string; index: number }>) => {
-      const { cardId, listId, index } = action.payload;
+    moveCard: (
+      state,
+      action: PayloadAction<{ cardId: string; listId: string; sourceListId: string; index: number }>,
+    ) => {
+      const { cardId, listId, sourceListId, index } = action.payload;
 
-      state.lists = state.lists.map(list => {
-        if (!list.cardIds.includes(cardId)) return list;
-        return { ...list, cardIds: without(list.cardIds, cardId) };
-      });
+      const targetCard = state.cards[cardId];
+      if (!targetCard) return;
 
-      state.lists = state.lists.map(list => {
-        if (list.id !== listId) return list;
-        const newCardIds = list.cardIds;
-        newCardIds.splice(index, 0, cardId);
-        return { ...list, cardIds: newCardIds };
-      });
+      const targetList = state.lists[listId];
+      if (!targetList) return;
+
+      const targetSourceList = state.lists[sourceListId];
+      if (!targetSourceList) return;
+
+      set(state.lists, `${sourceListId}.cardIds`, without(targetSourceList.cardIds, cardId));
+
+      const newCardIds = targetList.cardIds;
+      newCardIds.splice(index, 0, cardId);
+      set(state.lists, `${listId}.cardIds`, newCardIds);
+
+      set(state.cards, `${cardId}.listId`, listId);
     },
     moveList: (state, action: PayloadAction<{ listId: string; index: number }>) => {
       const { listId, index } = action.payload;

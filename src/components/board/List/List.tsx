@@ -49,7 +49,7 @@ const ListComponent: FC<ListProps> = ({ list, index }) => {
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
   const cards = useSelector((state: RootState) => {
-    return compact(list.cardIds.map(cardId => find(state.board.cards, { id: cardId })));
+    return compact(list.cardIds.map(cardId => state.board.cards[cardId]));
   });
 
   const [title, setTitle] = useState(list.title);
