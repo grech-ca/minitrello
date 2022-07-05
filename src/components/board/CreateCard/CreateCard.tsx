@@ -1,13 +1,14 @@
-import { ChangeEventHandler, FC, KeyboardEventHandler, useState, useRef } from 'react';
+import { ChangeEventHandler, FC, KeyboardEventHandler, useState, useRef, FormEventHandler } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { useClickAway, useKey } from 'react-use';
+import { MdAdd } from 'react-icons/md';
 
 import { Button, CloseButton } from 'components/common';
 
 import { createCardAction } from 'store/slices';
 
-import { CreateCardWrapper, Textarea, AddCardButton, AddCardButtonIcon, AddCardButtonText, Actions } from './styles';
+import { CreateCardWrapper, Textarea, Actions } from './styles';
 
 export interface CardFormProps {
   listId: string;
@@ -33,6 +34,10 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
   const handleChange: ChangeEventHandler<HTMLTextAreaElement> = ({ target: { value } }) => {
     setTitle(value.replace(/\r?\n|\r/, ''));
   };
+  const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
+    e.preventDefault();
+    createCard();
+  };
 
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = ({ key }) => {
     if (key !== 'Enter') return;
@@ -44,7 +49,7 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
 
   if (isOpen) {
     return (
-      <CreateCardWrapper ref={formRef}>
+      <CreateCardWrapper ref={formRef} onSubmit={handleSubmit}>
         <Textarea
           onChange={handleChange}
           autoFocus
@@ -54,7 +59,9 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
           minRows={3}
         />
         <Actions>
-          <Button type="submit">Add a card</Button>
+          <Button type="submit" variant="primary">
+            Add a card
+          </Button>
           <CloseButton onClick={close} />
         </Actions>
       </CreateCardWrapper>
@@ -62,9 +69,8 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
   }
 
   return (
-    <AddCardButton onClick={open}>
-      <AddCardButtonIcon />
-      <AddCardButtonText>Add a card</AddCardButtonText>
-    </AddCardButton>
+    <Button onClick={open} icon={MdAdd} fullWidth>
+      Add a card
+    </Button>
   );
 };

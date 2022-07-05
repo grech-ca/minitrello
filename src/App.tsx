@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from '@emotion/react';
 import { BrowserRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { store, persistor } from 'store';
 
@@ -17,6 +18,9 @@ import '@fontsource/roboto';
 export const App: FC = () => {
   return (
     <Fragment>
+      <Helmet>
+        <title>Minitrello</title>
+      </Helmet>
       <GlobalStyles />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

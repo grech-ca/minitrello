@@ -1,16 +1,16 @@
-import { FC, useRef, useState, FormEventHandler, ChangeEventHandler } from 'react';
+import { FC, useRef, useState, FormEventHandler } from 'react';
 
 import { useClickAway } from 'react-use';
 import { AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 
-import { Button, CloseButton } from 'components/common';
+import { Button, CloseButton, Editable } from 'components/common';
 
 import { useEscape } from 'hooks';
 
 import { createListAction } from 'store/slices';
 
-import { Wrapper, AddIcon, Form, Actions, Input, Placeholder } from './styles';
+import { Wrapper, AddIcon, Form, Actions, Placeholder } from './styles';
 
 export const CreateList: FC = () => {
   const dispatch = useDispatch();
@@ -19,25 +19,29 @@ export const CreateList: FC = () => {
   const [title, setTitle] = useState('');
 
   const formRef = useRef<HTMLFormElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const open = () => {
-    setIsOpen(true);
-    setTimeout(() => inputRef.current?.setSelectionRange(0, title.length), 0);
+  const resetTitle = () => setTitle('');
+  const createList = () => {
+    if (!title) return;
+    dispatch(createListAction(title));
+    resetTitle();
+    textareaRef.current?.focus();
   };
-  const close = () => setIsOpen(false);
+
+  const open = () => setIsOpen(true);
+  const close = () => {
+    setIsOpen(false);
+    resetTitle();
+  };
 
   useEscape(close);
   useClickAway(formRef, close);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
-    if (!title) return;
-    dispatch(createListAction(title));
-    setTitle('');
+    createList();
   };
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => setTitle(value);
 
   return (
     <Wrapper role="button">
@@ -54,16 +58,20 @@ export const CreateList: FC = () => {
             ref={formRef}
             onSubmit={handleSubmit}
           >
-            <Input
-              ref={inputRef}
+            <Editable
+              ref={textareaRef}
               autoFocus
-              type="text"
               placeholder="Enter list title..."
               value={title}
-              onChange={handleChange}
+              onChange={setTitle}
+              onCancel={close}
+              onSubmit={createList}
+              minRows={1}
             />
             <Actions>
-              <Button type="submit">Add list</Button>
+              <Button type="submit" variant="primary">
+                Add list
+              </Button>
               <CloseButton onClick={close} />
             </Actions>
           </Form>

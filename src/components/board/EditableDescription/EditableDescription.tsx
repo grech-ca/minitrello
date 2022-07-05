@@ -7,7 +7,7 @@ import { Button, EditableProps, Fill } from 'components/common';
 
 import { DescriptionActions, DescriptionWrapper, DescriptionTextarea, MarkdownWrapper } from './styles';
 
-export type EditableDescriptionProps = Omit<EditableProps, 'submitOnEnter' | 'placeholder'>;
+export type EditableDescriptionProps = Omit<EditableProps, 'submitOnEnter' | 'placeholder' | 'clickAwayAction'>;
 
 export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSubmit, value, ...props }) => {
   const descriptionRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,6 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
             onFocus={handleFocus}
             onCancel={cancel}
             submitOnEnter={false}
-            cancelOnClickAway={false}
             minRows={isFocused ? 6 : 2}
             autoFocus
             $isFocused={isFocused}
@@ -55,10 +54,12 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
       )}
       {isFocused && (
         <DescriptionActions>
-          <Button onClick={submit}>Save</Button>
+          <Button variant="primary" onClick={submit}>
+            Save
+          </Button>
           <Button onClick={cancel}>Cancel</Button>
           <Fill />
-          <Button>Formatting help</Button>
+          <Button variant="secondary">Formatting help</Button>
         </DescriptionActions>
       )}
     </DescriptionWrapper>

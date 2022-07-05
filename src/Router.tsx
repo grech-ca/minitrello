@@ -18,6 +18,7 @@ export const Router: FC = () => {
       </Routes>
       <Routes location={location} key={`${location.pathname}_modal`}>
         <Route path="/c/:cardId" element={<CardModal />} />
+        <Route path="/c/:cardId/:cardTitle" element={<CardModal />} />
       </Routes>
     </AnimatePresence>
   );

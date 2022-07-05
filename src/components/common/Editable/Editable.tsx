@@ -12,6 +12,8 @@ import { useClickAway } from 'react-use';
 
 import { EditableWrapper } from './styles';
 
+export type ClickAwayAction = 'submit' | 'cancel';
+
 export interface EditableProps extends Omit<TextareaAutosizeProps, 'onChange'> {
   value: string;
   onChange: (value: string) => void;
@@ -19,7 +21,7 @@ export interface EditableProps extends Omit<TextareaAutosizeProps, 'onChange'> {
   onCancel?: () => void;
   selectOnFocus?: boolean;
   submitOnEnter?: boolean;
-  cancelOnClickAway?: boolean;
+  clickAwayAction?: ClickAwayAction;
 }
 
 export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
@@ -31,7 +33,7 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
       onChange,
       selectOnFocus = true,
       submitOnEnter = true,
-      cancelOnClickAway = true,
+      clickAwayAction,
       onFocus,
       ...props
     },
@@ -74,7 +76,12 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
     };
 
     useClickAway(textareaRef, () => {
-      if (cancelOnClickAway) cancel();
+      switch (clickAwayAction) {
+        case 'submit':
+          return submit();
+        case 'cancel':
+          return cancel();
+      }
     });
 
     return (

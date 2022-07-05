@@ -7,6 +7,26 @@ export const ModalHeader = styled.div({
 
 export const ModalBody = styled.div({
   display: 'flex',
-  flexDirection: 'column',
+  gap: 16,
   padding: 10,
 });
+
+export const ModalContent = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1,
+});
+
+export const ModalSidebar = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  width: 192,
+  gap: 8,
+});
+
+export const ModalSidebarHeading = styled.h3(({ theme }) => ({
+  fontWeight: 700,
+  fontSize: 12,
+  color: theme.colors.darkGray,
+  margin: 0,
+}));
