@@ -46,7 +46,7 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
             onFocus={handleFocus}
             onCancel={cancel}
             submitOnEnter={false}
-            minRows={isFocused ? 6 : 2}
+            minRows={isFocused ? 6 : 3}
             autoFocus
             $isFocused={isFocused}
           />
