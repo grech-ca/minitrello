@@ -82,7 +82,7 @@ export const boardSlice = createSlice({
       const targetCard = state.cards[id];
       if (!targetCard) return;
 
-      set(state.cards, id, data);
+      set(state.cards, id, merge(targetCard, data));
     },
     moveCard: (
       state,
