@@ -15,6 +15,9 @@ export const ModalContent = styled.div({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
+  overflow: 'hidden',
+  padding: 5,
+  gap: 8,
 });
 
 export const ModalSidebar = styled.div({

@@ -5,12 +5,19 @@ import Markdown from 'markdown-to-jsx';
 
 import { Button, EditableProps, Fill } from 'components/common';
 
-import { DescriptionActions, DescriptionWrapper, DescriptionTextarea, MarkdownWrapper } from './styles';
+import {
+  DescriptionActions,
+  DescriptionWrapper,
+  DescriptionTextarea,
+  MarkdownWrapper,
+  TextareaWrapper,
+} from './styles';
 
 export type EditableDescriptionProps = Omit<EditableProps, 'submitOnEnter' | 'placeholder' | 'clickAwayAction'>;
 
 export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSubmit, value, ...props }) => {
   const descriptionRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -22,7 +29,10 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
     setIsFocused(false);
     onSubmit?.();
   };
-  const startEditing = () => setIsFocused(true);
+  const startEditing = () => {
+    setIsFocused(true);
+    setTimeout(() => textareaRef.current?.focus(), 0);
+  };
 
   const handleFocus: FocusEventHandler<HTMLTextAreaElement> = e => {
     setIsFocused(true);
@@ -38,19 +48,18 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
           <Markdown>{value}</Markdown>
         </MarkdownWrapper>
       ) : (
-        <div>
+        <TextareaWrapper $isFocused={isFocused}>
           <DescriptionTextarea
             {...props}
+            ref={textareaRef}
             value={value}
             placeholder="Add a more detailed description..."
             onFocus={handleFocus}
             onCancel={cancel}
             submitOnEnter={false}
             minRows={isFocused ? 6 : 3}
-            autoFocus
-            $isFocused={isFocused}
           />
-        </div>
+        </TextareaWrapper>
       )}
       {isFocused && (
         <DescriptionActions>

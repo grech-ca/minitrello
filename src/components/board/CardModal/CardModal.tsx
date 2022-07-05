@@ -1,8 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useState, useRef } from 'react';
 
 import { useParams, Navigate, useNavigate, useMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdOutlineLoyalty, MdOutlineCheckBox, MdDeleteOutline } from 'react-icons/md';
+import { pick, values } from 'lodash';
 import slugify from 'slugify';
 import { Helmet } from 'react-helmet';
 
@@ -15,17 +16,19 @@ import {
   ModalSidebarHeading,
   ModalContent,
 } from 'components/modal';
-import { EditableDescription } from 'components/board';
+import { EditableDescription, CreateChecklist, Checklist } from 'components/board';
 import { Button } from 'components/common';
 
 import { useEscape } from 'hooks';
 
 import { RootState } from 'store';
-import { updateCardAction, deleteCardAction } from 'store/slices';
+import { updateCardAction, deleteCardAction, createChecklistAction } from 'store/slices';
 
 import { CardTitle } from './styles';
 
 export const CardModal: FC = () => {
+  const checkListButtonRef = useRef<HTMLButtonElement>(null);
+
   const { cardId } = useParams<{ cardId: string }>();
   const navigate = useNavigate();
   const match = useMatch('/c/:cardId');
@@ -33,9 +36,14 @@ export const CardModal: FC = () => {
   const dispatch = useDispatch();
 
   const card = useSelector((state: RootState) => (cardId ? state.board.cards[cardId] : null));
+  const checklists = useSelector((state: RootState) => {
+    if (!card) return [];
+    return Object.values(pick(state.board.checklists, card.checklistIds));
+  });
 
   const [title, setTitle] = useState(card?.title || '');
   const [description, setDescription] = useState(card?.description || '');
+  const [isOpen, setIsOpen] = useState(true);
 
   useEscape(close);
 
@@ -55,9 +63,13 @@ export const CardModal: FC = () => {
     dispatch(deleteCardAction(card.id));
     navigate('/');
   };
-  const resetTitle = () => card && setTitle(card.title);
-  const updateDescription = () => card && dispatch(updateCardAction({ id: card.id, description }));
-  const resetDescription = () => card && setDescription(card.description || '');
+  const resetTitle = () => setTitle(card.title);
+  const updateDescription = () => dispatch(updateCardAction({ id: card.id, description }));
+  const resetDescription = () => setDescription(card.description || '');
+
+  const toggleCheckList = () => setIsOpen(prev => !prev);
+  const closeCheckList = () => setIsOpen(false);
+  const createChecklist = (title: string) => dispatch(createChecklistAction({ title, cardId: card.id }));
 
   return (
     <Modal>
@@ -82,15 +94,24 @@ export const CardModal: FC = () => {
             onSubmit={updateDescription}
             onCancel={resetDescription}
           />
+          {checklists.map(checklist => (
+            <Checklist key={checklist.id} checklist={checklist} />
+          ))}
         </ModalContent>
         <ModalSidebar>
           <ModalSidebarHeading>Add to card</ModalSidebarHeading>
           <Button variant="secondary" icon={MdOutlineLoyalty}>
             Labels
           </Button>
-          <Button variant="secondary" icon={MdOutlineCheckBox}>
+          <Button variant="secondary" ref={checkListButtonRef} icon={MdOutlineCheckBox} onClick={toggleCheckList}>
             Checklist
           </Button>
+          <CreateChecklist
+            isOpen={isOpen}
+            targetRef={checkListButtonRef}
+            onClose={closeCheckList}
+            onSubmit={createChecklist}
+          />
           <ModalSidebarHeading>Actions</ModalSidebarHeading>
           <Button variant="secondary" icon={MdDeleteOutline} onClick={deleteCard}>
             Delete

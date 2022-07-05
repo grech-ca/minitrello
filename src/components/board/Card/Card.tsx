@@ -37,7 +37,7 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
         <CardWrapper
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          isDivider={isDivider}
+          $isDivider={isDivider}
           ref={provided.innerRef}
           role="button"
           to={`/c/${card.id}`}

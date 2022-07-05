@@ -3,22 +3,33 @@ import { motion } from 'framer-motion';
 
 export const ModalOverlay = styled(motion.div)({
   position: 'fixed',
-  left: 0,
   top: 0,
-  height: '100%',
-  width: '100%',
-  background: '#0009',
+  left: 0,
+  right: 0,
+  bottom: 0,
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center',
+  alignItems: 'safe center',
+  background: '#0009',
+  minHeight: '100%',
+  height: 'auto',
+  width: '100%',
   zIndex: 100,
+  overflowY: 'auto',
+  padding: '5%',
 });
 
-export const ModalWrapper = styled(motion.div)(({ theme }) => ({
-  borderRadius: theme.rounding.sm,
-  background: theme.colors.lightGray,
-  padding: 8,
-  minWidth: 768,
-  position: 'relative',
+export const ModalWrapper = styled.div(({ theme: { media, colors, rounding } }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  background: colors.lightGray,
+  borderRadius: rounding.sm,
+  margin: 'auto',
+  width: 768,
+  maxWidth: 768,
   minHeight: 300,
+
+  [media.xs]: {
+    width: '95%',
+  },
 }));

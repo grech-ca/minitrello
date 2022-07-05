@@ -9,6 +9,7 @@ import {
 
 import { TextareaAutosizeProps } from 'react-textarea-autosize';
 import { useClickAway } from 'react-use';
+import { omitBy } from 'lodash';
 
 import { EditableWrapper } from './styles';
 
@@ -84,6 +85,8 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
       }
     });
 
+    const sanitizedProps = omitBy<typeof props>(props, (_, key) => key.startsWith('$'));
+
     return (
       <EditableWrapper
         ref={textareaRef}
@@ -91,7 +94,7 @@ export const Editable = forwardRef<HTMLTextAreaElement | null, EditableProps>(
         value={value}
         onChange={handleChange}
         onFocus={handleFocus}
-        {...props}
+        {...sanitizedProps}
       />
     );
   },

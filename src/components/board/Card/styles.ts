@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 interface CardWrapperProps {
-  isDivider: boolean;
+  $isDivider: boolean;
 }
 
-export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, isDivider }) => ({
+export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, $isDivider }) => ({
   boxShadow: '0 1px 0 #091e4240',
   borderRadius: theme.rounding.sm,
   resize: 'none',
@@ -27,7 +27,7 @@ export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, isDivider })
     background: '#f5f5fa',
   },
 
-  ...(isDivider
+  ...($isDivider
     ? {
         paddingInline: 16,
 

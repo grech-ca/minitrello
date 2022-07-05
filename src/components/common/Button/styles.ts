@@ -18,7 +18,7 @@ const getVariant = (variant: ButtonVariant, theme: Theme): CSSObject => {
       background: theme.colors.primary,
 
       ':hover': {
-        background: Color(theme.colors.primary).darken(0.2).toString(),
+        background: Color(theme.colors.primary).darken(0.1).toString(),
       },
     },
     secondary: {

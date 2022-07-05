@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import shortid from 'shortid';
-import { find, reject, set, unset, without, merge } from 'lodash';
+import { find, set, unset, without, merge } from 'lodash';
 
-import { List, Card, CreateCard } from './types';
+import { List, Card, CreateCard, Checklist, ChecklistItem } from './types';
+
+import { O } from 'ts-toolbelt';
 
 export interface BoardState {
   listsOrder: string[];
   lists: Record<string, List>;
   cards: Record<string, Card>;
+  checklists: Record<string, Checklist>;
 }
 
 const initialState: BoardState = {
   listsOrder: [],
   lists: {},
   cards: {},
+  checklists: {},
 };
 
 export const boardSlice = createSlice({
@@ -49,11 +53,19 @@ export const boardSlice = createSlice({
 
       state.lists[id] = merge(targetList, data);
     },
+    moveList: (state, action: PayloadAction<{ listId: string; index: number }>) => {
+      const { listId, index } = action.payload;
+      const newOrder = without(state.listsOrder, listId);
+      newOrder.splice(index, 0, listId);
+      state.listsOrder = newOrder;
+    },
+
     createCard: (state, action: PayloadAction<CreateCard>) => {
       const data = action.payload;
 
       const newCard: Card = {
         id: shortid.generate(),
+        checklistIds: [],
         ...data,
       };
       state.cards[newCard.id] = newCard;
@@ -74,7 +86,7 @@ export const boardSlice = createSlice({
       const targetList = state.lists[targetCard.listId];
       if (!targetList) return;
 
-      set(state.lists, `${targetList.id}.cardIds`, without(targetList.cardIds, deleteId));
+      set(state.lists, [targetList.id, 'cardIds'], without(targetList.cardIds, deleteId));
     },
     updateCard: (state, action: PayloadAction<Partial<Card> & Pick<Card, 'id'>>) => {
       const { id, ...data } = action.payload;
@@ -99,19 +111,83 @@ export const boardSlice = createSlice({
       const targetSourceList = state.lists[sourceListId];
       if (!targetSourceList) return;
 
-      set(state.lists, `${sourceListId}.cardIds`, without(targetSourceList.cardIds, cardId));
+      set(state.lists, [sourceListId, 'cardIds'], without(targetSourceList.cardIds, cardId));
 
       const newCardIds = targetList.cardIds;
       newCardIds.splice(index, 0, cardId);
       set(state.lists, `${listId}.cardIds`, newCardIds);
 
-      set(state.cards, `${cardId}.listId`, listId);
+      set(state.cards, [cardId, 'listId'], listId);
     },
-    moveList: (state, action: PayloadAction<{ listId: string; index: number }>) => {
-      const { listId, index } = action.payload;
-      const newOrder = without(state.listsOrder, listId);
-      newOrder.splice(index, 0, listId);
-      state.listsOrder = newOrder;
+
+    createChecklist: (state, action: PayloadAction<{ cardId: string; title: string }>) => {
+      const { cardId, title } = action.payload;
+
+      const targetCard = state.cards[cardId];
+      if (!targetCard) return;
+
+      const newChecklist: Checklist = {
+        id: shortid.generate(),
+        cardId,
+        title,
+        items: {},
+        itemIds: [],
+      };
+
+      set(state.checklists, newChecklist.id, newChecklist);
+      set(state.cards, [cardId, 'checklistIds'], [...targetCard.checklistIds, newChecklist.id]);
+    },
+    deleteChecklist: (state, action: PayloadAction<string>) => {
+      const deleteId = action.payload;
+
+      const targetChecklist = state.checklists[deleteId];
+      if (!targetChecklist) return;
+
+      const targetCard = state.cards[targetChecklist.cardId];
+      if (!targetCard) return;
+
+      unset(state.checklists, deleteId);
+      set(state.cards, [targetCard.id, 'checklistIds'], without(targetCard.checklistIds, deleteId));
+    },
+
+    createChecklistItem: (state, action: PayloadAction<{ checklistId: string; title: string }>) => {
+      const { checklistId, title } = action.payload;
+
+      const targetChecklist = state.checklists[checklistId];
+      if (!targetChecklist) return;
+
+      const newItem: ChecklistItem = {
+        id: shortid.generate(),
+        checklistId,
+        title,
+        completed: false,
+      };
+
+      set(state.checklists, [checklistId, 'items', newItem.id], newItem);
+      set(state.checklists, [checklistId, 'itemIds'], [...targetChecklist.itemIds, newItem.id]);
+    },
+    updateChecklistItem: (state, action: PayloadAction<O.Required<Partial<ChecklistItem>, 'id' | 'checklistId'>>) => {
+      const { id, checklistId, ...data } = action.payload;
+
+      const targetChecklist = state.checklists[checklistId];
+      if (!targetChecklist) return;
+
+      const targetItem = targetChecklist.items[id];
+      if (!targetItem) return;
+
+      set(state.checklists, [checklistId, 'items', id], merge(targetItem, data));
+    },
+    deleteChecklistItem: (state, action: PayloadAction<ChecklistItem>) => {
+      const { id, checklistId } = action.payload;
+
+      const targetChecklist = state.checklists[checklistId];
+      if (!targetChecklist) return;
+
+      const targetItem = targetChecklist.items[id];
+      if (!targetItem) return;
+
+      unset(state.checklists, [checklistId, 'items', id]);
+      set(state.checklists, [checklistId, 'itemIds'], without(targetChecklist.itemIds, id));
     },
   },
 });
@@ -121,10 +197,18 @@ export const boardReducer = boardSlice.reducer;
 export const {
   createCard: createCardAction,
   deleteCard: deleteCardAction,
+  moveCard: moveCardAction,
+  updateCard: updateCardAction,
+
   createList: createListAction,
   deleteList: deleteListAction,
   updateList: updateListAction,
-  moveCard: moveCardAction,
-  updateCard: updateCardAction,
   moveList: moveListAction,
+
+  createChecklist: createChecklistAction,
+  deleteChecklist: deleteChecklistAction,
+
+  createChecklistItem: createChecklistItemAction,
+  updateChecklistItem: updateChecklistItemAction,
+  deleteChecklistItem: deleteChecklistItemAction,
 } = boardSlice.actions;

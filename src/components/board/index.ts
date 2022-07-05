@@ -5,3 +5,7 @@ export * from './Card';
 export * from './CreateCard';
 export * from './CardModal';
 export * from './EditableDescription';
+export * from './Checklist';
+export * from './CreateChecklist';
+export * from './ChecklistItem';
+export * from './CreateChecklistItem';
