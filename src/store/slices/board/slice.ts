@@ -259,6 +259,9 @@ export const boardSlice = createSlice({
 
       unset(state.labels, deleteId);
     },
+
+    // Voided intentionally
+    resetBoard: () => undefined,
   },
 });
 
@@ -287,4 +290,6 @@ export const {
   createLabel: createLabelAction,
   updateLabel: updateLabelAction,
   deleteLabel: deleteLabelAction,
+
+  resetBoard: resetBoardAction,
 } = boardSlice.actions;

@@ -1,10 +1,13 @@
 import styled from '@emotion/styled';
 import { MdLeaderboard } from 'react-icons/md';
 
+import { Button } from 'components/common';
+
 export const StyledHeader = styled.header(({ theme }) => ({
   height: 44,
-  padding: '6px 4px',
+  padding: '6px 8px',
   display: 'flex',
+  alignItems: 'center',
   background: theme.colors.primary,
 }));
 
@@ -25,4 +28,8 @@ export const LogoIcon = styled(MdLeaderboard)(({ theme }) => ({
   color: theme.colors.primary,
   marginRight: 5,
   fontSize: 18,
+}));
+
+export const ResetButton = styled(Button)(({ theme }) => ({
+  color: theme.colors.white,
 }));
