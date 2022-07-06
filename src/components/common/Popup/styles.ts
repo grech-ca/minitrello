@@ -10,7 +10,7 @@ interface PopupWrapperProps {
   };
 }
 
-export const PopupWrapper = styled(motion.div)<PopupWrapperProps>(({ theme, $anchor: { height, x, y } }) => ({
+export const PopupWrapper = styled(motion.div)<PopupWrapperProps>(({ theme, $anchor: { x, y } }) => ({
   position: 'fixed',
   top: y,
   left: x,

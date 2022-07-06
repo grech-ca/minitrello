@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 
 import { MdCheckBoxOutlineBlank as UncheckedIcon, MdCheckBox as CheckedIcon, MdDelete } from 'react-icons/md';
 
-import { Editable, Button } from 'components/common';
+import { Button } from 'components/common';
 
 import { ChecklistItem } from 'store/slices';
 

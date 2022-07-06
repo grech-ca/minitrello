@@ -10,6 +10,7 @@ const reducers = {
 
 export const appReducer = combineReducers(reducers);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const rootReducer = (state: any, action: AnyAction) => {
   if (action.type === 'board/resetBoard') {
     void localForage.removeItem('persist:root');
