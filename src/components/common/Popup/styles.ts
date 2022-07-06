@@ -12,7 +12,7 @@ interface PopupWrapperProps {
 
 export const PopupWrapper = styled(motion.div)<PopupWrapperProps>(({ theme, $anchor: { height, x, y } }) => ({
   position: 'fixed',
-  top: y + height + 10,
+  top: y,
   left: x,
   width: 300,
   borderRadius: theme.rounding.sm,
@@ -24,4 +24,12 @@ export const PopupWrapper = styled(motion.div)<PopupWrapperProps>(({ theme, $anc
   zIndex: 200,
   display: 'flex',
   flexDirection: 'column',
+
+  [theme.media.sm]: {
+    margin: '0 auto',
+    left: 10,
+    right: 10,
+    bottom: 10,
+    top: 'unset',
+  },
 }));

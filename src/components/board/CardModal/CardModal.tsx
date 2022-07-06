@@ -47,7 +47,6 @@ export const CardModal: FC = () => {
   const [title, setTitle] = useState(card?.title || '');
   const [description, setDescription] = useState(card?.description || '');
   const [checklistPopupVisible, setChecklistPopupVisible] = useState(true);
-  const [labelPopupVisible, setLabelPopupVisible] = useState(true);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
   useEscape(close);
@@ -76,13 +75,10 @@ export const CardModal: FC = () => {
   const closeCheckList = () => setChecklistPopupVisible(false);
   const createChecklist = (title: string) => dispatch(createChecklistAction({ title, cardId: card.id }));
 
-  const toggleLabelPopup: MouseEventHandler<HTMLElement> = ({ target }) => {
-    setLabelPopupVisible(prev => {
-      setAnchorElement(prev ? null : (target as HTMLElement));
-      return !prev;
-    });
+  const toggleLabelPopup: MouseEventHandler<HTMLElement> = ({ currentTarget }) => {
+    setAnchorElement(prev => (prev ? null : (currentTarget as HTMLElement)));
   };
-  const closeLabelPopup = () => setLabelPopupVisible(false);
+  const closeLabelPopup = () => setAnchorElement(null);
 
   return (
     <Modal>
@@ -133,7 +129,7 @@ export const CardModal: FC = () => {
             onClose={closeCheckList}
             onSubmit={createChecklist}
           />
-          <AddLabel isOpen={labelPopupVisible} onClose={closeLabelPopup} anchorElement={anchorElement} card={card} />
+          <AddLabel isOpen={!!anchorElement} onClose={closeLabelPopup} anchorElement={anchorElement} card={card} />
           <ModalSidebarHeading>Actions</ModalSidebarHeading>
           <Button variant="secondary" icon={MdDeleteOutline} onClick={deleteCard}>
             Delete

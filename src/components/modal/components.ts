@@ -5,11 +5,15 @@ export const ModalHeader = styled.div({
   display: 'flex',
 });
 
-export const ModalBody = styled.div({
+export const ModalBody = styled.div(({ theme: { media } }) => ({
   display: 'flex',
   gap: 16,
   padding: 10,
-});
+
+  [media.sm]: {
+    flexDirection: 'column',
+  },
+}));
 
 export const ModalContent = styled.div({
   display: 'flex',
@@ -20,12 +24,16 @@ export const ModalContent = styled.div({
   gap: 8,
 });
 
-export const ModalSidebar = styled.div({
+export const ModalSidebar = styled.div(({ theme: { media } }) => ({
   display: 'flex',
   flexDirection: 'column',
   width: 192,
   gap: 8,
-});
+
+  [media.sm]: {
+    width: '100%',
+  },
+}));
 
 export const ModalSidebarHeading = styled.h3(({ theme }) => ({
   fontWeight: 700,
