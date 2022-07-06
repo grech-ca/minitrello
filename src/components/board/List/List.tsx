@@ -44,7 +44,7 @@ const getStyle = (style: DraggingStyle | NotDraggingStyle | undefined, snapshot:
 const ListComponent: FC<ListProps> = ({ list, index }) => {
   const dispatch = useDispatch();
 
-  const [handlerVisible, setHandlerVisible] = useState(false);
+  const [handlerVisible, setHandlerVisible] = useState(true);
 
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
