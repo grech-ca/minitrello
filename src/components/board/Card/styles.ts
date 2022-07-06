@@ -18,7 +18,9 @@ export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, $isDivider }
   cursor: 'pointer !important',
   minHeight: 32,
   display: 'flex',
-  alignItems: 'center',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  gap: 8,
   transition: '.05s ease',
   color: '#000',
   textDecoration: 'none',
@@ -40,4 +42,35 @@ export const CardWrapper = styled(Link)<CardWrapperProps>(({ theme, $isDivider }
         },
       }
     : {}),
+}));
+
+export const CardHeader = styled.div({
+  display: 'flex',
+});
+
+export const ShortLabels = styled.div({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 4,
+});
+
+interface ShortLabelProps {
+  $color: string;
+}
+
+export const ShortLabel = styled.div<ShortLabelProps>(({ theme, $color }) => ({
+  display: 'inline-block',
+  borderRadius: theme.rounding.lg,
+  height: 8,
+  width: 40,
+  background: $color,
+}));
+
+export const CardFooter = styled.div(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  flexWrap: 'wrap',
+  fontSize: 14,
+  color: theme.colors.darkGray,
 }));

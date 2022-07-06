@@ -11,6 +11,7 @@ export interface Card {
   listId: string;
   title: string;
   checklistIds: string[];
+  labelIds: string[];
   description?: string;
 }
 
@@ -35,3 +36,11 @@ export interface ChecklistItem {
 }
 
 export type UpdateChecklistItem = O.Required<Partial<ChecklistItem>, 'id' | 'checklistId'>;
+
+export interface Label {
+  id: string;
+  name: string;
+  color: string | null;
+}
+
+export type UpdateLabel = O.Required<Partial<Label>, 'id'>;

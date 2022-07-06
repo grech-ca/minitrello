@@ -10,7 +10,7 @@ export interface CreateChecklistProps extends Omit<PopupProps, 'children'> {
 
 const DEFAULT_TITLE = 'Checklist';
 
-export const CreateChecklist: FC<CreateChecklistProps> = ({ targetRef, isOpen, onClose, onSubmit }) => {
+export const CreateChecklist: FC<CreateChecklistProps> = ({ anchorElement, isOpen, onClose, onSubmit }) => {
   const [title, setTitle] = useState(DEFAULT_TITLE);
 
   const submit = () => {
@@ -21,7 +21,7 @@ export const CreateChecklist: FC<CreateChecklistProps> = ({ targetRef, isOpen, o
   };
 
   return (
-    <Popup targetRef={targetRef} isOpen={isOpen} onClose={onClose}>
+    <Popup anchorElement={anchorElement} isOpen={isOpen} onClose={onClose}>
       <PopupHeader>Add checklist</PopupHeader>
       <PopupBody>
         <Field>

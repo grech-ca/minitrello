@@ -2,7 +2,7 @@ import { FC, useState, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Droppable, Draggable, DraggingStyle, NotDraggingStyle, DraggableStateSnapshot } from 'react-beautiful-dnd';
-import { find, compact } from 'lodash';
+import { compact } from 'lodash';
 
 import { Card, CreateCard } from 'components/board';
 

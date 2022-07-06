@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import shortid from 'shortid';
-import { find, set, unset, without, merge } from 'lodash';
+import { find, set, unset, without, merge, fromPairs } from 'lodash';
 
-import { List, Card, CreateCard, Checklist, ChecklistItem } from './types';
+import { List, Card, CreateCard, Checklist, ChecklistItem, Label, UpdateLabel } from './types';
 
 import { O } from 'ts-toolbelt';
 
@@ -11,13 +11,29 @@ export interface BoardState {
   lists: Record<string, List>;
   cards: Record<string, Card>;
   checklists: Record<string, Checklist>;
+  labels: Record<string, Label>;
 }
+
+export const COLORS = [
+  '#61bd4f',
+  '#f2d600',
+  '#ff9f1a',
+  '#eb5a46',
+  '#c377e0',
+  '#0079bf',
+  '#00c2e0',
+  '#51e898',
+  '#ff78cb',
+  '#344563',
+  '#b3bac5',
+];
 
 const initialState: BoardState = {
   listsOrder: [],
   lists: {},
   cards: {},
   checklists: {},
+  labels: fromPairs(COLORS.map(color => [color, { id: color, color, name: '' }])),
 };
 
 export const boardSlice = createSlice({
@@ -66,6 +82,7 @@ export const boardSlice = createSlice({
       const newCard: Card = {
         id: shortid.generate(),
         checklistIds: [],
+        labelIds: [],
         ...data,
       };
       state.cards[newCard.id] = newCard;
@@ -189,6 +206,59 @@ export const boardSlice = createSlice({
       unset(state.checklists, [checklistId, 'items', id]);
       set(state.checklists, [checklistId, 'itemIds'], without(targetChecklist.itemIds, id));
     },
+
+    addLabel: (state, action: PayloadAction<{ cardId: string; id: string }>) => {
+      const { id, cardId } = action.payload;
+
+      const targetLabel = state.labels[id];
+      if (!targetLabel) return;
+
+      const targetCard = state.cards[cardId];
+      if (!targetCard) return;
+
+      set(state.cards, [cardId, 'labelIds'], [id, ...targetCard.labelIds]);
+    },
+    removeLabel: (state, action: PayloadAction<{ id: string; cardId: string }>) => {
+      const { id, cardId } = action.payload;
+
+      const targetLabel = state.labels[id];
+      if (!targetLabel) return;
+
+      const targetCard = state.cards[cardId];
+      if (!targetCard) return;
+
+      set(state.cards, [cardId, 'labelIds'], without(targetCard.labelIds, id));
+    },
+    createLabel: (state, action: PayloadAction<{ name: string; color: string | null }>) => {
+      const data = action.payload;
+      const newLabel: Label = {
+        id: shortid.generate(),
+        ...data,
+      };
+
+      set(state.labels, newLabel.id, newLabel);
+    },
+    updateLabel: (state, action: PayloadAction<UpdateLabel>) => {
+      const { id, ...data } = action.payload;
+
+      const targetLabel = state.labels[id];
+      if (!targetLabel) return;
+
+      set(state.labels, id, merge(targetLabel, data));
+    },
+    deleteLabel: (state, action: PayloadAction<string>) => {
+      const deleteId = action.payload;
+
+      const targetLabel = state.labels[deleteId];
+      if (!targetLabel) return;
+
+      Object.values(state.cards).forEach(card => {
+        if (!card.labelIds.includes(deleteId)) return;
+        set(state.cards, [card.id, 'labelIds'], without(card.labelIds, deleteId));
+      });
+
+      unset(state.labels, deleteId);
+    },
   },
 });
 
@@ -211,4 +281,10 @@ export const {
   createChecklistItem: createChecklistItemAction,
   updateChecklistItem: updateChecklistItemAction,
   deleteChecklistItem: deleteChecklistItemAction,
+
+  addLabel: addLabelAction,
+  removeLabel: removeLabelAction,
+  createLabel: createLabelAction,
+  updateLabel: updateLabelAction,
+  deleteLabel: deleteLabelAction,
 } = boardSlice.actions;

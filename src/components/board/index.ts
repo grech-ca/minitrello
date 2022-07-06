@@ -9,3 +9,4 @@ export * from './Checklist';
 export * from './CreateChecklist';
 export * from './ChecklistItem';
 export * from './CreateChecklistItem';
+export * from './AddLabel';

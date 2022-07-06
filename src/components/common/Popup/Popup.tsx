@@ -1,4 +1,4 @@
-import { FC, ReactNode, RefObject, useRef } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useClickAway } from 'react-use';
@@ -9,27 +9,27 @@ import { PopupWrapper } from './styles';
 import { rootElement } from 'index';
 
 export interface PopupProps {
-  targetRef: RefObject<HTMLElement>;
+  anchorElement: HTMLElement | null;
   isOpen: boolean;
   children: ReactNode | ReactNode[];
   onClose?: () => void;
 }
 
-export const Popup: FC<PopupProps> = ({ children, targetRef, isOpen, onClose }) => {
+export const Popup: FC<PopupProps> = ({ children, anchorElement, isOpen, onClose }) => {
   const popupRef = useRef<HTMLDivElement>(null);
 
   const close = () => onClose?.();
 
   useClickAway(popupRef, ({ target }) => {
-    if (target === targetRef.current) return;
+    if (target === anchorElement) return;
     close();
   });
 
-  const { width = 0, height = 0, x = 0, y = 0 } = targetRef.current?.getBoundingClientRect() ?? {};
+  const { width = 0, height = 0, x = 0, y = 0 } = anchorElement?.getBoundingClientRect() ?? {};
 
   return createPortal(
     <AnimatePresence>
-      {isOpen && targetRef.current ? (
+      {isOpen && anchorElement ? (
         <PopupWrapper
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

@@ -8,4 +8,6 @@ export const PopupHeader = styled.div({
 
 export const PopupBody = styled.div({});
 
-export const PopupActions = styled.div({});
+export const PopupActions = styled.div({
+  display: 'flex',
+});
