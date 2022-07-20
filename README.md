@@ -20,6 +20,9 @@ Try it out at: https://minitrello.grech.dev
   - Checlists creation
   - Card modal
   - Drag-and-drop reordering
+  - Editable colored labels
+  - Description and checklists indicators
+  - Checklist progress bar
 * Data
   - Local data saved using IndexedDB
   - Ability to reset the app
