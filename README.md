@@ -1,46 +1,44 @@
-# Getting Started with Create React App
+# Minitrello
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img width="1440" alt="Screenshot 2022-07-20 at 12 20 54" src="https://user-images.githubusercontent.com/54347665/179946872-c3bb34bd-9640-4e40-a618-965580a41de4.png">
 
-## Available Scripts
+The project is a minimum clone of Trello made as a test for the _______ company.
 
-In the project directory, you can run:
+Try it out at: https://minitrello.grech.dev
+
+## Features
+
+* Lists
+  - List creation
+  - Name editing
+  - Drag-and-drop reordering
+  - Deletion
+* Cards
+  - Card creation
+  - Name editing
+  - Description editing
+  - Checlists creation
+  - Card modal
+  - Drag-and-drop reordering
+* Data
+  - Local data saved using IndexedDB
+  - Ability to reset the app
+  
+## Technologies
+- React
+- Typescript
+- Redux Toolkit
+- Emotion
+- React Beautiful DnD
+- Framer Motion
+
+
+## Scripts
 
 ### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Start the Project
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Build the project
