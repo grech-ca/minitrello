@@ -6,6 +6,11 @@ The project is a minimum clone of Trello made as a test for the _______ company.
 
 Try it out at: https://minitrello.grech.dev
 
+
+The project was made in 35 hours (according to info from <a href="https://wakatime.com/" target="_blank">WakaTime</a>):
+
+![image](https://user-images.githubusercontent.com/54347665/179950520-1e0d4149-0b22-4a8c-ab7b-901b65a76299.png)
+
 ## Features
 
 * Lists
