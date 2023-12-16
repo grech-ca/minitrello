@@ -12,7 +12,7 @@ export const GlobalStyles: FC = () => (
         boxSizing: 'border-box',
       },
       'html, body, #root': {
-        height: '100vh',
+        height: '100dvh',
         background: '#ccc',
       },
     })}
