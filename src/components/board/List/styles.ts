@@ -77,8 +77,7 @@ export const ListBody = styled.div({
   flexDirection: 'column',
   gap: 10,
   flex: 1,
-  padding: '0 10px',
-  paddingTop: 8,
+  padding: '8px 10px 4px',
 });
 
 export const ListFooter = styled.div({
@@ -86,5 +85,5 @@ export const ListFooter = styled.div({
   justifyContent: 'stretch',
   alignItems: 'center',
   gap: 4,
-  padding: '8px 10px',
+  padding: '4px 10px 8px',
 });
