@@ -54,7 +54,7 @@ export const AppDrawer = () => {
               leaveFrom="translate-x-0 opacity-100 blur-0"
               leaveTo="translate-x-full opacity-0 blur-2xl"
             >
-              <Dialog.Panel className="fixed inset-y-0 right-0 p-6 rounded-l-3xl bg-white w-4/5 max-w-xs grid gap-y-6 content-start">
+              <Dialog.Panel className="fixed inset-y-0 right-0 px-4 py-3 rounded-l-2xl bg-white w-4/5 max-w-xs grid gap-y-6 content-start">
                 <div className="flex justify-between items-center">
                   <div className="text-xl">Menu</div>
                   <button

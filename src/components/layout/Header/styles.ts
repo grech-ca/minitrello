@@ -4,8 +4,7 @@ import { MdLeaderboard } from 'react-icons/md';
 import { Button } from 'components/common';
 
 export const StyledHeader = styled.header(({ theme }) => ({
-  height: 44,
-  padding: '6px 8px',
+  padding: '12px 16px',
   display: 'flex',
   alignItems: 'center',
   background: theme.colors.primary,
