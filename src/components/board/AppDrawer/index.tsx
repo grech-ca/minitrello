@@ -55,11 +55,15 @@ export const AppDrawer = () => {
               leaveTo="translate-x-full opacity-0 blur-2xl"
             >
               <Dialog.Panel className="fixed inset-y-0 right-0 px-4 py-3 rounded-l-2xl bg-white w-4/5 max-w-xs grid gap-y-6 content-start">
-                <div className="flex justify-between items-center">
-                  <div className="text-xl">Menu</div>
+                <div className="grid grid-cols-[2rem_1fr_2rem] items-center">
+                  <div className="text-xl col-start-2 text-center">Menu</div>
                   <button
                     onClick={toggleOpened}
-                    className="rounded hover:bg-gray-900/10 active:bg-gray-900/20 transition-colors flex items-center justify-center aspect-square h-8 text-xl text-gray-900"
+                    className={clsx(
+                      'rounded hover:bg-gray-900/10 active:bg-gray-900/20 transition-colors',
+                      'flex items-center justify-center aspect-square h-8 text-xl text-gray-900',
+                      'col-start-3',
+                    )}
                   >
                     <CloseIcon />
                   </button>
