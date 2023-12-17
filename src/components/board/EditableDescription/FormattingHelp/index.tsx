@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
-import { useFloating, autoPlacement, offset } from '@floating-ui/react';
-import { Popover, Transition } from '@headlessui/react';
+import { autoPlacement, offset } from '@floating-ui/react';
+import { Popover } from '@headlessui/react';
 import { Float } from '@headlessui-float/react';
 
 export const FormattingHelp = () => {
