@@ -14,6 +14,7 @@ import { Router } from 'Router';
 
 import 'normalize.css/normalize.css';
 import '@fontsource/roboto';
+import 'global.css';
 
 export const App: FC = () => {
   return (

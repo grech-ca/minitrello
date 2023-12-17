@@ -53,15 +53,6 @@ rules:
     - error
     - component: true
       html: true
-  react/forbid-component-props:
-    - error
-    - forbid:
-      - className
-  react/forbid-dom-props:
-    - error
-    - forbid:
-      - style
-      - className
   react/function-component-definition:
     - error
     - namedComponents: arrow-function

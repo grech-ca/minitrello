@@ -27,7 +27,7 @@ export const ModalWrapper = styled.div(({ theme: { media, colors, rounding } }) 
   margin: 'auto',
   width: 768,
   maxWidth: 768,
-  minHeight: 300,
+  minHeight: '20rem',
 
   [media.xs]: {
     width: '95%',

@@ -13,6 +13,8 @@ import {
   TextareaWrapper,
 } from './styles';
 
+import { FormattingHelp } from './FormattingHelp';
+
 export type EditableDescriptionProps = Omit<EditableProps, 'submitOnEnter' | 'placeholder' | 'clickAwayAction'>;
 
 export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSubmit, value, ...props }) => {
@@ -68,7 +70,7 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
           </Button>
           <Button onClick={cancel}>Cancel</Button>
           <Fill />
-          <Button variant="secondary">Formatting help</Button>
+          <FormattingHelp />
         </DescriptionActions>
       )}
     </DescriptionWrapper>

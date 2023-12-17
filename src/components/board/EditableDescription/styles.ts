@@ -60,5 +60,31 @@ export const MarkdownWrapper = styled.div({
 
   '& h1': {
     margin: 0,
+    fontSize: '2em',
+  },
+
+  '& h2': {
+    fontSize: '1.5em',
+  },
+
+  '& h3': {
+    fontSize: '1.17em',
+  },
+
+  '& h4': {
+    fontSize: '1em',
+  },
+
+  '& h5': {
+    fontSize: '0.83em',
+  },
+
+  '& h6': {
+    fontSize: '0.75em',
+  },
+
+  '& blockquote': {
+    borderLeft: '4px solid #ccc',
+    padding: '4px 8px',
   },
 });
