@@ -62,8 +62,6 @@ export const DeleteButton = styled.button(({ theme }) => ({
   ':hover': {
     background: '#ddd',
   },
-
-  zIndex: 1,
 }));
 
 export const DeleteIcon = styled(MdDelete)({});
