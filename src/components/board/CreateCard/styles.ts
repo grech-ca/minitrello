@@ -1,13 +1,6 @@
 import styled from '@emotion/styled';
 import ReactTextarea from 'react-textarea-autosize';
 
-export const CreateCardWrapper = styled.form({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 8,
-});
-
 export const Textarea = styled(ReactTextarea)(({ theme }) => ({
   boxShadow: '0 1px 0 #091e4240',
   borderRadius: theme.rounding.sm,

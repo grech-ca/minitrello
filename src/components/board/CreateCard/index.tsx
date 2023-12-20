@@ -3,12 +3,13 @@ import { ChangeEventHandler, FC, KeyboardEventHandler, useState, useRef, FormEve
 import { useDispatch } from 'react-redux';
 import { useClickAway, useKey } from 'react-use';
 import { MdAdd } from 'react-icons/md';
+import ReactTextarea from 'react-textarea-autosize';
 
 import { Button, CloseButton } from 'components/common';
 
 import { createCardAction } from 'store/slices';
 
-import { CreateCardWrapper, Textarea, Actions } from './styles';
+import { Textarea, Actions } from './styles';
 
 export interface CardFormProps {
   listId: string;
@@ -49,8 +50,9 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
 
   if (isOpen) {
     return (
-      <CreateCardWrapper ref={formRef} onSubmit={handleSubmit}>
-        <Textarea
+      <form className="w-full flex flex-col gap-2" ref={formRef} onSubmit={handleSubmit}>
+        <ReactTextarea
+          className="border-b-2 border-b-slate-900/10 rounded-lg resize-none w-full outline-none text-sm py-2 px-3 bg-white"
           onChange={handleChange}
           autoFocus
           value={title}
@@ -58,13 +60,13 @@ export const CreateCard: FC<CardFormProps> = ({ listId }) => {
           placeholder="Enter a title for this card..."
           minRows={3}
         />
-        <Actions>
+        <div className="flex gap-x-1 h-8">
           <Button type="submit" variant="primary">
             Add a card
           </Button>
           <CloseButton onClick={close} />
-        </Actions>
-      </CreateCardWrapper>
+        </div>
+      </form>
     );
   }
 

@@ -24,6 +24,7 @@ export const theme = {
   },
   rounding: {
     sm: 3,
+    md: 8,
     lg: 12,
   },
   breakpoints,

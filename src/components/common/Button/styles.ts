@@ -3,7 +3,7 @@ import Color from 'color';
 
 import { Theme } from 'styles';
 
-import { ButtonVariant } from './Button';
+import { ButtonVariant } from './';
 
 interface ButtonWrapperProps {
   $variant: ButtonVariant;
@@ -47,7 +47,7 @@ export const ButtonWrapper = styled.button<ButtonWrapperProps>(({ theme, $varian
   alignItems: 'center',
   justifyContent: $icon ? 'flex-start' : 'center',
   gap: 6,
-  borderRadius: theme.rounding.sm,
+  borderRadius: theme.rounding.md,
   border: 'none',
   padding: '4px 12px',
   cursor: 'pointer',

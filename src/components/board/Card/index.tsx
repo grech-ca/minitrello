@@ -1,17 +1,17 @@
 import { FC, useMemo, Fragment } from 'react';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Draggable, DraggableStateSnapshot, DraggingStyle, NotDraggingStyle } from 'react-beautiful-dnd';
 import { pick, values, filter } from 'lodash';
 import { MdSubject, MdOutlineCheckBox } from 'react-icons/md';
+import { clsx } from 'clsx';
 
 import { Card, Label } from 'store/slices/board/types';
 import { RootState } from 'store';
 
-import { CardWrapper, CardHeader, ShortLabels, ShortLabel, CardFooter } from './styles';
-
 import { O } from 'ts-toolbelt';
+import { ShortLabels } from './ShortLabels';
 
 export interface CardProps {
   card: Card;
@@ -60,10 +60,14 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
   return (
     <Draggable draggableId={card.id} index={index}>
       {(provided, snapshot) => (
-        <CardWrapper
+        <Link
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          $isDivider={isDivider}
+          className={clsx(
+            'border-b-2 border-b-slate-900/10 rounded-lg resize-none w-full outline-none text-sm py-2 px-3 !cursor-pointer min-h-[2rem]',
+            'flex flex-col justify-center gap-2 transition-[0.05s] text-black no-underline bg-slate-50 hover:bg-gray-100',
+            { 'px-4 after:inline-block after:h-0.5 after:w-full after:bg-gray-300': isDivider },
+          )}
           ref={provided.innerRef}
           role="button"
           to={`/c/${card.id}`}
@@ -71,17 +75,13 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
           style={getStyle(provided.draggableProps.style, snapshot)}
         >
           {labelsList.length > 0 && (
-            <CardHeader>
-              <ShortLabels>
-                {labelsList.map(({ id, color }) => (
-                  <ShortLabel key={id} $color={color} />
-                ))}
-              </ShortLabels>
-            </CardHeader>
+            <div className="flex">
+              <ShortLabels colors={labelsList.map(({ color }) => color)} />
+            </div>
           )}
           {!isDivider && card.title}
           {(hasDescription || hasChecklists) && (
-            <CardFooter>
+            <div className="flex items-center gap-4 flex-wrap text-sm text-gray-500">
               {hasDescription && <MdSubject />}
               {hasChecklists && (
                 <Fragment>
@@ -89,9 +89,9 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
                   {completed} / {total}
                 </Fragment>
               )}
-            </CardFooter>
+            </div>
           )}
-        </CardWrapper>
+        </Link>
       )}
     </Draggable>
   );
