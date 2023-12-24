@@ -171,7 +171,7 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
           >
             <CardContainer
               className={clsx(
-                'w-full border-b-2border-b-slate-900/10 transition-[0.05s] hover:bg-gray-100',
+                'w-full border-b-2border-b-slate-900/10 transition-[0.05s] hover:bg-gray-100 !cursor-pointer',
                 {
                   'px-4 after:inline-block after:h-0.5 after:w-full after:bg-gray-300': isDivider,
                 },

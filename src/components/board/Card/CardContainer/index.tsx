@@ -8,7 +8,7 @@ export const CardContainer = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
       <div
         ref={ref}
         className={clsx(
-          'relative rounded-lg outline-none text-sm py-2 px-3 !cursor-pointer min-h-[2rem]',
+          'relative rounded-lg outline-none text-sm py-2 px-3 min-h-[2rem]',
           'flex flex-col justify-center gap-2 bg-slate-50 group',
           className,
         )}
