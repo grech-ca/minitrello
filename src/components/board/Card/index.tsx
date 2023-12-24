@@ -22,12 +22,12 @@ import { useToggle } from 'react-use'
 import { Dialog, Transition } from '@headlessui/react'
 import { useFloating, autoPlacement, offset, autoUpdate } from '@floating-ui/react'
 import { IconType } from 'react-icons'
-import { useDispatch } from 'react-redux'
 import mergeRefs from 'merge-refs'
+
+import { useCard } from 'hooks'
 
 import { Card, Label } from 'store/slices/board/types'
 import { RootState } from 'store'
-import { deleteCardAction, updateCardAction } from 'store/slices'
 
 import { O } from 'ts-toolbelt'
 import { ShortLabels } from './ShortLabels'
@@ -66,7 +66,7 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
   const titleRef = useRef<TitleRef>(null)
 
   const [isDialogOpened, toggleDialog] = useToggle(false)
-  const dispatch = useDispatch()
+  const { updateCard, removeCard } = useCard(card.id)
 
   const labels = useSelector((state: RootState) => pick(state.board.labels, card.labelIds))
   const labelsList = filter(values(labels)) as O.Compulsory<Label, 'color'>[]
@@ -138,7 +138,7 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
         icon: DeleteIcon,
         title: 'Delete',
         action: () => {
-          dispatch(deleteCardAction(card.id))
+          removeCard()
           closeDialog()
         },
       },
@@ -149,7 +149,7 @@ export const CardComponent: FC<CardProps> = ({ card, index }) => {
   const labelsColors = useMemo(() => labelsList.map(({ color }) => color), [labelsList])
 
   const handleTitleChange = (title: string) => {
-    dispatch(updateCardAction({ id: card.id, title }))
+    updateCard({ title })
     closeDialog()
   }
 

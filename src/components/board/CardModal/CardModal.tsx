@@ -1,11 +1,9 @@
-import { FC, useState, useRef, MouseEventHandler } from 'react';
+import { FC, useState, useRef, MouseEventHandler } from 'react'
 
-import { useParams, Navigate, useNavigate, useMatch } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { MdOutlineLoyalty, MdOutlineCheckBox, MdDeleteOutline, MdAdd } from 'react-icons/md';
-import { pick, values } from 'lodash';
-import slugify from 'slugify';
-import { Helmet } from 'react-helmet';
+import { useParams, Navigate, useNavigate, useMatch } from 'react-router-dom'
+import { MdOutlineLoyalty, MdOutlineCheckBox, MdDeleteOutline, MdAdd } from 'react-icons/md'
+import slugify from 'slugify'
+import { Helmet } from 'react-helmet'
 
 import {
   Modal,
@@ -15,70 +13,58 @@ import {
   ModalSidebar,
   ModalSidebarHeading,
   ModalContent,
-} from 'components/modal';
-import { EditableDescription, CreateChecklist, Checklist, AddLabel } from 'components/board';
-import { Button } from 'components/common';
+} from 'components/modal'
+import { EditableDescription, CreateChecklist, Checklist, AddLabel } from 'components/board'
+import { Button } from 'components/common'
 
-import { useEscape } from 'hooks';
+import { useCard, useEscape } from 'hooks'
 
-import { RootState } from 'store';
-import { updateCardAction, deleteCardAction, createChecklistAction } from 'store/slices';
-
-import { CardTitle, LabelsList, Label } from './styles';
+import { CardTitle, LabelsList, Label } from './styles'
 
 export const CardModal: FC = () => {
-  const checkListButtonRef = useRef<HTMLButtonElement>(null);
-  const labelButtonRef = useRef<HTMLButtonElement>(null);
+  const checkListButtonRef = useRef<HTMLButtonElement>(null)
+  const labelButtonRef = useRef<HTMLButtonElement>(null)
 
-  const { cardId } = useParams<{ cardId: string }>();
-  const navigate = useNavigate();
-  const match = useMatch('/c/:cardId');
+  const { cardId } = useParams<{ cardId: string }>()
+  const { card, checklists, labels, updateCard, removeCard, addChecklist } = useCard(cardId!)
 
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const match = useMatch('/c/:cardId')
 
-  const card = useSelector((state: RootState) => (cardId ? state.board.cards[cardId] : null));
-  const checklists = useSelector((state: RootState) => {
-    if (!card) return [];
-    return Object.values(pick(state.board.checklists, card.checklistIds));
-  });
-  const labels = useSelector((state: RootState) => state.board.labels);
-  const labelsList = card ? values(pick(labels, card?.labelIds)) : [];
+  const [title, setTitle] = useState(card?.title || '')
+  const [description, setDescription] = useState(card?.description || '')
+  const [checklistPopupVisible, setChecklistPopupVisible] = useState(true)
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
 
-  const [title, setTitle] = useState(card?.title || '');
-  const [description, setDescription] = useState(card?.description || '');
-  const [checklistPopupVisible, setChecklistPopupVisible] = useState(true);
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  useEscape(close)
 
-  useEscape(close);
+  if (!card) return <Navigate to="/" />
 
-  if (!card) return <Navigate to="/" />;
+  const fullPath = `/c/${card.id}/${slugify(title) || `${card.id}-untitled`}`
 
-  const fullPath = `/c/${card.id}/${slugify(title) || `${card.id}-untitled`}`;
-
-  if (match) return <Navigate to={fullPath} replace />;
+  if (match) return <Navigate to={fullPath} replace />
 
   const renameCard = () => {
-    if (!card) return;
-    dispatch(updateCardAction({ id: card.id, title }));
-    navigate(fullPath, { replace: true });
-  };
+    if (!card) return
+    updateCard({ title })
+    navigate(fullPath, { replace: true })
+  }
   const deleteCard = () => {
-    if (!card) return;
-    dispatch(deleteCardAction(card.id));
-    navigate('/');
-  };
-  const resetTitle = () => setTitle(card.title);
-  const updateDescription = () => dispatch(updateCardAction({ id: card.id, description }));
-  const resetDescription = () => setDescription(card.description || '');
+    if (!card) return
+    removeCard()
+    navigate('/')
+  }
+  const resetTitle = () => setTitle(card.title)
+  const updateDescription = () => updateCard({ description })
+  const resetDescription = () => setDescription(card.description || '')
 
-  const toggleCheckList = () => setChecklistPopupVisible(prev => !prev);
-  const closeCheckList = () => setChecklistPopupVisible(false);
-  const createChecklist = (title: string) => dispatch(createChecklistAction({ title, cardId: card.id }));
+  const toggleCheckList = () => setChecklistPopupVisible(prev => !prev)
+  const closeCheckList = () => setChecklistPopupVisible(false)
 
   const toggleLabelPopup: MouseEventHandler<HTMLElement> = ({ currentTarget }) => {
-    setAnchorElement(prev => (prev ? null : (currentTarget as HTMLElement)));
-  };
-  const closeLabelPopup = () => setAnchorElement(null);
+    setAnchorElement(prev => (prev ? null : (currentTarget as HTMLElement)))
+  }
+  const closeLabelPopup = () => setAnchorElement(null)
 
   return (
     <Modal>
@@ -98,7 +84,7 @@ export const CardModal: FC = () => {
       <ModalBody>
         <ModalContent>
           <LabelsList>
-            {labelsList.map(({ id, color, name }) => (
+            {labels.map(({ id, color, name }) => (
               <Label key={id} $color={color} onClick={toggleLabelPopup}>
                 {name}
               </Label>
@@ -117,19 +103,34 @@ export const CardModal: FC = () => {
         </ModalContent>
         <ModalSidebar>
           <ModalSidebarHeading>Add to card</ModalSidebarHeading>
-          <Button variant="secondary" icon={MdOutlineLoyalty} onClick={toggleLabelPopup} ref={labelButtonRef}>
+          <Button
+            variant="secondary"
+            icon={MdOutlineLoyalty}
+            onClick={toggleLabelPopup}
+            ref={labelButtonRef}
+          >
             Labels
           </Button>
-          <Button variant="secondary" ref={checkListButtonRef} icon={MdOutlineCheckBox} onClick={toggleCheckList}>
+          <Button
+            variant="secondary"
+            ref={checkListButtonRef}
+            icon={MdOutlineCheckBox}
+            onClick={toggleCheckList}
+          >
             Checklist
           </Button>
           <CreateChecklist
             isOpen={checklistPopupVisible}
             anchorElement={checkListButtonRef.current}
             onClose={closeCheckList}
-            onSubmit={createChecklist}
+            onSubmit={addChecklist}
           />
-          <AddLabel isOpen={!!anchorElement} onClose={closeLabelPopup} anchorElement={anchorElement} card={card} />
+          <AddLabel
+            isOpen={!!anchorElement}
+            onClose={closeLabelPopup}
+            anchorElement={anchorElement}
+            card={card}
+          />
           <ModalSidebarHeading>Actions</ModalSidebarHeading>
           <Button variant="secondary" icon={MdDeleteOutline} onClick={deleteCard}>
             Delete
@@ -137,5 +138,5 @@ export const CardModal: FC = () => {
         </ModalSidebar>
       </ModalBody>
     </Modal>
-  );
-};
+  )
+}
