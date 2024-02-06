@@ -95,6 +95,12 @@
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.3.6",
-    "ts-toolbelt": "^9.6.0"
+    "ts-toolbelt": "^9.6.0",
+    "bun-types": "latest"
+  },
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
