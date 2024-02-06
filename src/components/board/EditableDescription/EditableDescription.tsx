@@ -1,9 +1,9 @@
-import { FC, FocusEventHandler, useState, useRef } from 'react';
+import { FC, FocusEventHandler, useState, useRef } from 'react'
 
-import { useClickAway } from 'react-use';
-import Markdown from 'markdown-to-jsx';
+import { useClickAway } from 'react-use'
+import Markdown from 'markdown-to-jsx'
 
-import { Button, EditableProps, Fill } from 'components/common';
+import { Button, EditableProps } from 'components/common'
 
 import {
   DescriptionActions,
@@ -11,37 +11,46 @@ import {
   DescriptionTextarea,
   MarkdownWrapper,
   TextareaWrapper,
-} from './styles';
+} from './styles'
 
-import { FormattingHelp } from './FormattingHelp';
+import { FormattingHelp } from './FormattingHelp'
 
-export type EditableDescriptionProps = Omit<EditableProps, 'submitOnEnter' | 'placeholder' | 'clickAwayAction'>;
+export type EditableDescriptionProps = Omit<
+  EditableProps,
+  'submitOnEnter' | 'placeholder' | 'clickAwayAction'
+>
 
-export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSubmit, value, ...props }) => {
-  const descriptionRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+export const EditableDescription: FC<EditableProps> = ({
+  onFocus,
+  onCancel,
+  onSubmit,
+  value,
+  ...props
+}) => {
+  const descriptionRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false)
 
   const cancel = () => {
-    setIsFocused(false);
-    onCancel?.();
-  };
+    setIsFocused(false)
+    onCancel?.()
+  }
   const submit = () => {
-    setIsFocused(false);
-    onSubmit?.();
-  };
+    setIsFocused(false)
+    onSubmit?.()
+  }
   const startEditing = () => {
-    setIsFocused(true);
-    setTimeout(() => textareaRef.current?.focus(), 0);
-  };
+    setIsFocused(true)
+    setTimeout(() => textareaRef.current?.focus(), 0)
+  }
 
   const handleFocus: FocusEventHandler<HTMLTextAreaElement> = e => {
-    setIsFocused(true);
-    onFocus?.(e);
-  };
+    setIsFocused(true)
+    onFocus?.(e)
+  }
 
-  useClickAway(descriptionRef, cancel);
+  useClickAway(descriptionRef, cancel)
 
   return (
     <DescriptionWrapper ref={descriptionRef}>
@@ -69,10 +78,10 @@ export const EditableDescription: FC<EditableProps> = ({ onFocus, onCancel, onSu
             Save
           </Button>
           <Button onClick={cancel}>Cancel</Button>
-          <Fill />
+          <div className="flex-1" />
           <FormattingHelp />
         </DescriptionActions>
       )}
     </DescriptionWrapper>
-  );
-};
+  )
+}

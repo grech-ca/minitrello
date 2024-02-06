@@ -1,14 +1,14 @@
-import { ComponentProps, FC, ReactNode, forwardRef } from 'react';
+import { ComponentProps, FC, ReactNode, forwardRef } from 'react'
 
-import { ButtonIcon, ButtonWrapper } from './styles';
+import { ButtonIcon, ButtonWrapper } from './styles'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'default';
+export type ButtonVariant = 'primary' | 'secondary' | 'default'
 
 export interface ButtonProps extends ComponentProps<'button'> {
-  children?: null | ReactNode | ReactNode[];
-  variant?: ButtonVariant;
-  icon?: FC<ComponentProps<'svg'>>;
-  fullWidth?: boolean;
+  children?: null | ReactNode | ReactNode[]
+  variant?: ButtonVariant
+  icon?: FC<ComponentProps<'svg'>>
+  fullWidth?: boolean
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -18,6 +18,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {icon && <ButtonIcon as={icon} />}
         {children}
       </ButtonWrapper>
-    );
+    )
   },
-);
+)

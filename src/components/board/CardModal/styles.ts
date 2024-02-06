@@ -1,30 +1,30 @@
-import styled from '@emotion/styled';
-import Color from 'color';
+import styled from '@emotion/styled'
+import Color from 'color'
 
-import { Editable } from 'components/common';
+import { Editable } from 'components/common'
 
-import { COLORS } from 'store/slices';
+import { LabelColor } from 'store/slices'
 
 export const CardTitle = styled(Editable)({
   fontSize: 20,
   fontWeight: 700,
-});
+})
 
 export const LabelsList = styled.div({
   display: 'flex',
   flexWrap: 'wrap',
   gap: 4,
-});
+})
 
 interface LabelProps {
-  $color: string | null;
+  $color: string | null
 }
 
 export const Label = styled.button<LabelProps>(({ theme, $color }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   border: 'none',
-  background: $color ?? COLORS[COLORS.length - 1],
+  background: $color ?? LabelColor.Hidden,
   height: 32,
   minWidth: 40,
   borderRadius: theme.rounding.sm,
@@ -33,8 +33,8 @@ export const Label = styled.button<LabelProps>(({ theme, $color }) => ({
   padding: '0 12px',
 
   ':hover': {
-    background: Color($color ?? COLORS[COLORS.length - 1])
+    background: Color($color ?? LabelColor.Hidden)
       .lighten(0.2)
       .toString(),
   },
-}));
+}))

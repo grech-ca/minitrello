@@ -1,9 +1,19 @@
 import { FC, useState, useRef, MouseEventHandler } from 'react'
 
 import { useParams, Navigate, useNavigate, useMatch } from 'react-router-dom'
-import { MdOutlineLoyalty, MdOutlineCheckBox, MdDeleteOutline, MdAdd } from 'react-icons/md'
+import { MdOutlineLoyalty, MdOutlineCheckBox, MdDeleteOutline, MdAdd, MdLabelOutline } from 'react-icons/md'
 import slugify from 'slugify'
 import { Helmet } from 'react-helmet'
+import {
+  shift,
+  offset,
+  size,
+  useFloating,
+  autoPlacement,
+  autoUpdate,
+  flip,
+} from '@floating-ui/react'
+import { useToggle } from 'react-use'
 
 import {
   Modal,
@@ -14,12 +24,16 @@ import {
   ModalSidebarHeading,
   ModalContent,
 } from 'components/modal'
-import { EditableDescription, CreateChecklist, Checklist, AddLabel } from 'components/board'
-import { Button } from 'components/common'
+import {Button} from 'common/Button'
+import { EditableDescription, CreateChecklist, Checklist } from 'components/board'
+import { Button as Button_deprecated } from 'components/common'
+import { LabelEditor } from 'components/common/LabelEditor'
 
 import { useCard, useEscape } from 'hooks'
 
 import { CardTitle, LabelsList, Label } from './styles'
+import { Popover } from '@headlessui/react'
+import { ButtonBase } from 'common/Button/ButtonBase'
 
 export const CardModal: FC = () => {
   const checkListButtonRef = useRef<HTMLButtonElement>(null)
@@ -34,9 +48,26 @@ export const CardModal: FC = () => {
   const [title, setTitle] = useState(card?.title || '')
   const [description, setDescription] = useState(card?.description || '')
   const [checklistPopupVisible, setChecklistPopupVisible] = useState(true)
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null)
 
-  useEscape(close)
+  const [isLabelEditorOpened, toggleLabelEditor] = useToggle(false)
+  const labelEditorFloatingData = useFloating({
+    open: isLabelEditorOpened,
+    onOpenChange: toggleLabelEditor,
+    placement: 'bottom-start',
+    middleware: [
+      size({
+        padding: 8,
+        apply({ elements }) {
+          Object.assign(elements.floating.style, { maxHeight: `calc(100dvh - 8px * 2)` })
+        },
+      }),
+      offset(8),
+      shift({ padding: 8, crossAxis: true }),
+    ],
+    whileElementsMounted: autoUpdate,
+  })
+
+  // useEscape(close)
 
   if (!card) return <Navigate to="/" />
 
@@ -62,9 +93,8 @@ export const CardModal: FC = () => {
   const closeCheckList = () => setChecklistPopupVisible(false)
 
   const toggleLabelPopup: MouseEventHandler<HTMLElement> = ({ currentTarget }) => {
-    setAnchorElement(prev => (prev ? null : (currentTarget as HTMLElement)))
+    // setAnchorElement(prev => (prev ? null : (currentTarget as HTMLElement)))
   }
-  const closeLabelPopup = () => setAnchorElement(null)
 
   return (
     <Modal>
@@ -89,7 +119,7 @@ export const CardModal: FC = () => {
                 {name}
               </Label>
             ))}
-            <Button icon={MdAdd} onClick={toggleLabelPopup} variant="secondary" />
+            <Button_deprecated icon={MdAdd} onClick={toggleLabelPopup} variant="secondary" />
           </LabelsList>
           <EditableDescription
             value={description}
@@ -103,38 +133,31 @@ export const CardModal: FC = () => {
         </ModalContent>
         <ModalSidebar>
           <ModalSidebarHeading>Add to card</ModalSidebarHeading>
-          <Button
-            variant="secondary"
-            icon={MdOutlineLoyalty}
-            onClick={toggleLabelPopup}
-            ref={labelButtonRef}
-          >
-            Labels
-          </Button>
-          <Button
+          <LabelEditor card={card}>
+            <ButtonBase as={Popover.Button}>
+              <Button icon={MdLabelOutline} as="div" variant="secondary" pressEffect>
+                Labels
+              </Button>
+            </ButtonBase>
+          </LabelEditor>
+          <Button_deprecated
             variant="secondary"
             ref={checkListButtonRef}
             icon={MdOutlineCheckBox}
             onClick={toggleCheckList}
           >
             Checklist
-          </Button>
-          <CreateChecklist
-            isOpen={checklistPopupVisible}
-            anchorElement={checkListButtonRef.current}
-            onClose={closeCheckList}
-            onSubmit={addChecklist}
-          />
-          <AddLabel
-            isOpen={!!anchorElement}
-            onClose={closeLabelPopup}
-            anchorElement={anchorElement}
-            card={card}
-          />
+          </Button_deprecated>
+          {/* <CreateChecklist */}
+          {/*   isOpen={checklistPopupVisible} */}
+          {/*   anchorElement={checkListButtonRef.current} */}
+          {/*   onClose={closeCheckList} */}
+          {/*   onSubmit={addChecklist} */}
+          {/* /> */}
           <ModalSidebarHeading>Actions</ModalSidebarHeading>
-          <Button variant="secondary" icon={MdDeleteOutline} onClick={deleteCard}>
+          <Button_deprecated variant="secondary" icon={MdDeleteOutline} onClick={deleteCard}>
             Delete
-          </Button>
+          </Button_deprecated>
         </ModalSidebar>
       </ModalBody>
     </Modal>

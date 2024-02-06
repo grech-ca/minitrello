@@ -9,6 +9,12 @@ module.exports = {
       },
       width: {
         '63': 'calc(63 * 1rem / 4)',
+      },
+      transitionProperty: {
+        'button': 'transform 0.1s ease-out, color 0.15s linear',
+      },
+      scale: {
+        '80': '.80'
       }
     },
   },

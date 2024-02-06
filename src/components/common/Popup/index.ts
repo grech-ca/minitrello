@@ -1,2 +1,1 @@
-export * from './Popup';
-export * from './components';
+export * from './Popup'

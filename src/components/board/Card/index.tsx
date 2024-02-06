@@ -20,7 +20,7 @@ import { Card } from 'store/slices/board/types'
 import { ShortLabels } from './ShortLabels'
 import { LinkOverlay } from './LinkOverlay'
 import { CardContainer } from './CardContainer'
-import { EditMenu } from './EditMenu'
+import { EditMenu } from './EditMenu/EditMenu'
 
 export interface CardProps {
   card: Card

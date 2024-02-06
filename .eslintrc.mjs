@@ -8,6 +8,11 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     '.imports.eslintrc.js',
   ],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -25,4 +30,7 @@ module.exports = {
     '@typescript-eslint/require-await': 'off',
     '@typescript-eslint/no-misused-promises': 'off',
   },
+  globals: {
+    location: true
+  }
 }

@@ -1,9 +1,8 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
-import { Fill } from 'components/common';
-import { AppDrawer } from 'components/board/AppDrawer';
+import { AppDrawer } from 'components/board/AppDrawer'
 
-import { StyledHeader, Logo, LogoIcon } from './styles';
+import { StyledHeader, Logo, LogoIcon } from './styles'
 
 export const Header: FC = () => {
   return (
@@ -12,8 +11,8 @@ export const Header: FC = () => {
         <LogoIcon />
         Minitrello
       </Logo>
-      <Fill />
+      <div className="flex-1" />
       <AppDrawer />
     </StyledHeader>
-  );
-};
+  )
+}
